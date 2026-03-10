@@ -7,19 +7,11 @@
  */
 export const fetchWebTitles = async (url, selector = 'h3', limit = 20) => {
   try {
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-    const response = await fetch(proxyUrl);
-    const data = await response.json();
-    if (!data.contents) return [];
-
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(data.contents, 'text/html');
-    const elements = doc.querySelectorAll(selector);
-
-    return Array.from(elements)
-      .map(el => el.textContent.trim())
-      .filter(t => t.length > 10)
-      .slice(0, limit);
+    // Eigen server als proxy — geen CORS-problemen, geen externe diensten
+    const params = new URLSearchParams({ action: 'scrape', url, selector, limit });
+    const response = await fetch(`https://davevera.nl/oo-news.php?${params}`);
+    if (!response.ok) return [];
+    return await response.json();
   } catch (error) {
     console.error('Web title fetch failed:', error);
     return [];
