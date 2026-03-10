@@ -117,21 +117,12 @@
   ],
   "widgets": [
     {
-      "id": "w-weather",
-      "type": "weather",
-      "name": "Weer Uden",
+      "id": "w-smartstack",
+      "type": "smartstack",
+      "name": "Smart Stack",
       "px": 20,
       "py": 20,
-      "size": "medium",
-      "isVisible": true
-    },
-    {
-      "id": "w-traffic",
-      "type": "traffic",
-      "name": "Verkeer",
-      "px": 1120,
-      "py": 20,
-      "size": "medium",
+      "size": "small",
       "isVisible": true
     }
   ],

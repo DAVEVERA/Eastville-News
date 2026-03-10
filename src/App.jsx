@@ -3,7 +3,7 @@ import { config } from './config';
 import initialNewsData from './data/news.json';
 import NewsTicker from './components/NewsTicker';
 import MainSlider from './components/MainSlider';
-import { WeatherWidget, TrafficWidget } from './components/Widgets';
+import { WeatherWidget, TrafficWidget, SmartStackWidget } from './components/Widgets';
 import Admin from './components/Admin';
 import { fetchRSS, fetchWebTitles } from './dataService';
 // './firebase' wordt niet meer gebruikt — sync loopt via davevera.nl
@@ -184,11 +184,17 @@ function App() {
       
       let newSize = initialSize;
 
-      // Size order: small → wide → medium → xlarge → large
+      // Size chain: small ↔ compact ↔ slim ↔ wide ↔ medium ↔ xlarge ↔ large
       if (initialSize === 'small') {
-        if (deltaX > 100) newSize = 'wide';
+        if (deltaX > 80) newSize = 'compact';
+      } else if (initialSize === 'compact') {
+        if (deltaX < -80) newSize = 'small';
+        else if (deltaX > 80) newSize = 'slim';
+      } else if (initialSize === 'slim') {
+        if (deltaX < -80) newSize = 'compact';
+        else if (deltaX > 80) newSize = 'wide';
       } else if (initialSize === 'wide') {
-        if (deltaX < -100) newSize = 'small';
+        if (deltaX < -80) newSize = 'slim';
         else if (deltaX > 150) newSize = 'medium';
       } else if (initialSize === 'medium') {
         if (deltaX < -150) newSize = 'wide';
@@ -287,17 +293,24 @@ function App() {
                   userSelect: 'none'
                 }}
               >
+                {w.type === 'smartstack' && (
+                  <SmartStackWidget
+                    location={config.widgets.weatherLocation}
+                    size={w.size}
+                    onResizeStart={(e) => onResizeStart(e, w.id)}
+                  />
+                )}
                 {w.type === 'weather' && (
-                  <WeatherWidget 
-                    location={config.widgets.weatherLocation} 
-                    size={w.size} 
-                    onResizeStart={(e) => onResizeStart(e, w.id)} 
+                  <WeatherWidget
+                    location={config.widgets.weatherLocation}
+                    size={w.size}
+                    onResizeStart={(e) => onResizeStart(e, w.id)}
                   />
                 )}
                 {w.type === 'traffic' && (
-                  <TrafficWidget 
-                    size={w.size} 
-                    onResizeStart={(e) => onResizeStart(e, w.id)} 
+                  <TrafficWidget
+                    size={w.size}
+                    onResizeStart={(e) => onResizeStart(e, w.id)}
                   />
                 )}
               </div>

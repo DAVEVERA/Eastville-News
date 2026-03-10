@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { fetchWeather, fetchTraffic, getWeatherDesc, getWeatherIcon } from '../dataService';
 
+// Compact sizes share the glassmorphism small/wide look but no header
+const COMPACT_SIZES = ['small', 'compact', 'slim', 'wide'];
+
 export const BaseWidget = ({ title, children, icon, size = 'small', onResizeStart }) => (
   <div className={`glass widget size-${size}`}>
-    {size !== 'small' && size !== 'wide' && (
+    {!COMPACT_SIZES.includes(size) && (
       <div style={{
         display: 'flex',
         justifyContent: 'space-between',
@@ -28,7 +31,7 @@ export const BaseWidget = ({ title, children, icon, size = 'small', onResizeStar
       flex: 1,
       display: 'flex',
       flexDirection: 'column',
-      justifyContent: (size === 'small' || size === 'wide') ? 'flex-start' : 'center'
+      justifyContent: COMPACT_SIZES.includes(size) ? 'flex-start' : 'center'
     }}>
       {children}
     </div>
@@ -54,6 +57,175 @@ export const BaseWidget = ({ title, children, icon, size = 'small', onResizeStar
   </div>
 );
 
+// ── SmartStack: rotating Date / Weather / Traffic ──────────────────────────
+export const SmartStackWidget = ({ location, size, onResizeStart }) => {
+  const [weather, setWeather] = useState(null);
+  const [traffic, setTraffic] = useState([]);
+  const [activeCard, setActiveCard] = useState(0);
+  const [trafficIdx, setTrafficIdx] = useState(0);
+  const [now, setNow] = useState(new Date());
+
+  // Clock
+  useEffect(() => {
+    const t = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(t);
+  }, []);
+
+  // Weather
+  useEffect(() => {
+    const update = async () => { const d = await fetchWeather(); if (d) setWeather(d); };
+    update();
+    const t = setInterval(update, 600000);
+    return () => clearInterval(t);
+  }, []);
+
+  // Traffic
+  useEffect(() => {
+    const update = async () => { const d = await fetchTraffic(); if (d) setTraffic(d); };
+    update();
+    const t = setInterval(update, 300000);
+    return () => clearInterval(t);
+  }, []);
+
+  // Rotate cards every 5s
+  useEffect(() => {
+    const t = setInterval(() => setActiveCard(p => (p + 1) % 3), 5000);
+    return () => clearInterval(t);
+  }, []);
+
+  // Rotate traffic items every 3s when traffic card is shown
+  useEffect(() => {
+    if (activeCard === 2 && traffic.length > 1) {
+      const t = setInterval(() => setTrafficIdx(p => (p + 1) % traffic.length), 3000);
+      return () => clearInterval(t);
+    }
+  }, [activeCard, traffic]);
+
+  const condIcon = weather ? getWeatherIcon(weather.condition) : '🌤️';
+  const NL_DAYS  = ['zo','ma','di','wo','do','vr','za'];
+  const NL_MONTHS = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+  const isNarrow = size === 'small' || size === 'compact';
+  const isWide   = size === 'wide' || size === 'slim';
+  const isBig    = !COMPACT_SIZES.includes(size);
+
+  const labelStyle = { fontSize: '0.42rem', fontWeight: '900', opacity: 0.35, letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: '4px' };
+
+  // ── CARD 0: Date ──
+  const DateCard = (
+    <div style={{ display: 'flex', flexDirection: isWide ? 'row' : 'column', alignItems: isWide ? 'center' : 'flex-start', gap: isWide ? '10px' : '2px' }}>
+      {!isWide && <div style={labelStyle}>Datum</div>}
+      <div style={{ fontSize: isNarrow ? '2rem' : isWide ? '2rem' : '3rem', fontWeight: '950', letterSpacing: '-2px', color: '#000', lineHeight: 1 }}>
+        {now.getDate()}
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
+        {isWide && <div style={labelStyle}>Datum</div>}
+        <div style={{ fontSize: '0.65rem', fontWeight: '800', color: 'rgba(0,0,0,0.75)', lineHeight: 1.2 }}>
+          {NL_DAYS[now.getDay()]}
+        </div>
+        <div style={{ fontSize: '0.5rem', fontWeight: '700', color: 'rgba(0,0,0,0.4)' }}>
+          {NL_MONTHS[now.getMonth()]} {now.getFullYear()}
+        </div>
+      </div>
+    </div>
+  );
+
+  // ── CARD 1: Weather ──
+  const WeatherCard = (
+    <div style={{ display: 'flex', flexDirection: isWide ? 'row' : 'column', alignItems: isWide ? 'center' : 'flex-start', gap: isWide ? '10px' : '3px' }}>
+      {!isWide && <div style={labelStyle}>{location}</div>}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+        <span style={{ fontSize: isNarrow ? '1.4rem' : '1.8rem', lineHeight: 1 }}>{condIcon}</span>
+        <span style={{ fontSize: isNarrow ? '1.3rem' : '1.8rem', fontWeight: '950', letterSpacing: '-1px', color: '#000', lineHeight: 1 }}>
+          {weather ? `${weather.temp}°` : '--°'}
+        </span>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
+        {isWide && <div style={labelStyle}>{location}</div>}
+        <div style={{ fontSize: '0.58rem', fontWeight: '800', color: 'rgba(0,0,0,0.7)', lineHeight: 1.2 }}>
+          {weather ? getWeatherDesc(weather.condition) : 'Laden...'}
+        </div>
+        {(isWide || isBig) && weather && (
+          <div style={{ fontSize: '0.5rem', fontWeight: '700', color: 'rgba(0,0,0,0.4)' }}>
+            Wind {weather.wind} km/u
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  // ── CARD 2: Traffic ──
+  const TrafficCard = (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+      <div style={labelStyle}>Verkeer · {trafficIdx + 1}/{Math.max(traffic.length, 1)}</div>
+      {traffic.length > 0 ? (
+        <div key={trafficIdx}>
+          {isWide ? (
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
+              <div style={{ display: 'inline-block', background: 'var(--primary-color)', color: '#fff', padding: '1px 6px', borderRadius: '4px', fontSize: '0.6rem', fontWeight: '950', flexShrink: 0 }}>
+                {traffic[trafficIdx]?.road}
+              </div>
+              <div style={{ fontSize: '0.58rem', fontWeight: '700', color: 'rgba(0,0,0,0.8)', lineHeight: 1.3 }}>
+                {traffic[trafficIdx]?.msg}
+              </div>
+            </div>
+          ) : (
+            <>
+              <div style={{ display: 'inline-block', background: 'var(--primary-color)', color: '#fff', padding: '1px 6px', borderRadius: '4px', fontSize: '0.6rem', fontWeight: '950', marginBottom: '3px' }}>
+                {traffic[trafficIdx]?.road}
+              </div>
+              <div style={{ fontSize: '0.58rem', fontWeight: '700', color: 'rgba(0,0,0,0.8)', lineHeight: 1.3 }}>
+                {traffic[trafficIdx]?.msg}
+              </div>
+            </>
+          )}
+        </div>
+      ) : (
+        <div style={{ fontSize: '0.58rem', opacity: 0.5 }}>Geen meldingen</div>
+      )}
+    </div>
+  );
+
+  const CARDS = [DateCard, WeatherCard, TrafficCard];
+  const ICONS  = ['📅', '🌤️', '🚗'];
+
+  return (
+    <BaseWidget title="Smart Stack" icon={ICONS[activeCard]} size={size} onResizeStart={onResizeStart}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        {/* Rotating card content */}
+        <div key={activeCard} style={{ animation: 'stackIn 0.35s cubic-bezier(0.23, 1, 0.32, 1)' }}>
+          {CARDS[activeCard]}
+        </div>
+
+        {/* Dot indicators */}
+        <div style={{ display: 'flex', gap: '4px', justifyContent: 'center', marginTop: '10px' }}>
+          {[0, 1, 2].map(i => (
+            <div
+              key={i}
+              onClick={() => setActiveCard(i)}
+              style={{
+                width: activeCard === i ? '14px' : '5px',
+                height: '5px',
+                borderRadius: '100px',
+                background: activeCard === i ? 'var(--primary-color)' : 'rgba(0,0,0,0.18)',
+                transition: 'width 0.3s ease, background 0.3s ease',
+                cursor: 'pointer',
+                flexShrink: 0
+              }}
+            />
+          ))}
+        </div>
+      </div>
+      <style>{`
+        @keyframes stackIn {
+          from { opacity: 0; transform: translateY(8px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
+    </BaseWidget>
+  );
+};
+
+// ── WeatherWidget (standalone) ─────────────────────────────────────────────
 export const WeatherWidget = ({ location, size, onResizeStart }) => {
   const [weather, setWeather] = useState(null);
 
@@ -69,7 +241,7 @@ export const WeatherWidget = ({ location, size, onResizeStart }) => {
 
   const condIcon = weather ? getWeatherIcon(weather.condition) : '🌤️';
 
-  if (size === 'small') {
+  if (size === 'small' || size === 'compact') {
     return (
       <BaseWidget title={`Weer in ${location}`} icon="🌤️" size={size} onResizeStart={onResizeStart}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
@@ -90,7 +262,7 @@ export const WeatherWidget = ({ location, size, onResizeStart }) => {
     );
   }
 
-  if (size === 'wide') {
+  if (size === 'wide' || size === 'slim') {
     return (
       <BaseWidget title={`Weer in ${location}`} icon="🌤️" size={size} onResizeStart={onResizeStart}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -116,29 +288,13 @@ export const WeatherWidget = ({ location, size, onResizeStart }) => {
   return (
     <BaseWidget title={`Weer in ${location}`} icon="🌤️" size={size} onResizeStart={onResizeStart}>
       <div style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'center', gap: '6px' }}>
-        {/* Main row: icon + temp + details */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <div style={{
-            fontSize: size === 'large' ? '4rem' : '3rem',
-            lineHeight: 1,
-            filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.1))'
-          }}>{condIcon}</div>
+          <div style={{ fontSize: size === 'large' ? '4rem' : '3rem', lineHeight: 1, filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.1))' }}>{condIcon}</div>
           <div>
-            <div style={{
-              fontSize: size === 'large' ? '3.8rem' : '3rem',
-              fontWeight: '950',
-              letterSpacing: '-3px',
-              color: '#000',
-              lineHeight: 0.9
-            }}>
+            <div style={{ fontSize: size === 'large' ? '3.8rem' : '3rem', fontWeight: '950', letterSpacing: '-3px', color: '#000', lineHeight: 0.9 }}>
               {weather ? `${weather.temp}°` : '--°'}
             </div>
-            <div style={{
-              fontSize: size === 'large' ? '1rem' : '0.85rem',
-              fontWeight: '800',
-              color: 'rgba(0,0,0,0.75)',
-              marginTop: '4px'
-            }}>
+            <div style={{ fontSize: size === 'large' ? '1rem' : '0.85rem', fontWeight: '800', color: 'rgba(0,0,0,0.75)', marginTop: '4px' }}>
               {weather ? getWeatherDesc(weather.condition) : 'Laden...'}
             </div>
             {weather && (
@@ -148,20 +304,12 @@ export const WeatherWidget = ({ location, size, onResizeStart }) => {
             )}
           </div>
         </div>
-
-        {/* Forecast for xlarge (2 days) and large (3 days) */}
         {(size === 'large' || size === 'xlarge') && weather?.forecast && (
           <div style={{ marginTop: '8px', borderTop: '1px solid rgba(0,0,0,0.06)', paddingTop: '12px' }}>
             <p style={{ margin: '0 0 8px 0', fontSize: '0.62rem', fontWeight: '900', color: 'var(--primary-color)', letterSpacing: '1.2px', textTransform: 'uppercase' }}>Voorspelling</p>
             <div style={{ display: 'grid', gridTemplateColumns: size === 'large' ? 'repeat(3, 1fr)' : 'repeat(2, 1fr)', gap: '8px' }}>
               {weather.forecast.slice(0, size === 'large' ? 3 : 2).map((day, idx) => (
-                <div key={idx} style={{
-                  textAlign: 'center',
-                  background: 'rgba(0,172,169,0.04)',
-                  padding: '8px 4px',
-                  borderRadius: '12px',
-                  border: '1px solid rgba(0,172,169,0.1)'
-                }}>
+                <div key={idx} style={{ textAlign: 'center', background: 'rgba(0,172,169,0.04)', padding: '8px 4px', borderRadius: '12px', border: '1px solid rgba(0,172,169,0.1)' }}>
                   <div style={{ fontSize: '0.6rem', fontWeight: '800', opacity: 0.45, textTransform: 'uppercase' }}>
                     {new Date(day.date).toLocaleDateString('nl-NL', { weekday: 'short' })}
                   </div>
@@ -178,6 +326,7 @@ export const WeatherWidget = ({ location, size, onResizeStart }) => {
   );
 };
 
+// ── TrafficWidget (standalone) ─────────────────────────────────────────────
 export const TrafficWidget = ({ size, onResizeStart }) => {
   const [traffic, setTraffic] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -192,9 +341,8 @@ export const TrafficWidget = ({ size, onResizeStart }) => {
     return () => clearInterval(timer);
   }, []);
 
-  // Small/wide auto-rotation logic
   useEffect(() => {
-    if ((size === 'small' || size === 'wide') && traffic.length > 1) {
+    if (COMPACT_SIZES.includes(size) && traffic.length > 1) {
       const timer = setInterval(() => {
         setCurrentIndex(prev => (prev + 1) % traffic.length);
       }, 5000);
@@ -207,53 +355,30 @@ export const TrafficWidget = ({ size, onResizeStart }) => {
   return (
     <BaseWidget title="Verkeer Uden" icon="🚗" size={size} onResizeStart={onResizeStart}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        {size === 'small' || size === 'wide' ? (
+        {COMPACT_SIZES.includes(size) ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-            <div style={{
-              fontSize: '0.48rem',
-              fontWeight: '900',
-              opacity: 0.4,
-              letterSpacing: '0.8px',
-              textTransform: 'uppercase'
-            }}>
+            <div style={{ fontSize: '0.48rem', fontWeight: '900', opacity: 0.4, letterSpacing: '0.8px', textTransform: 'uppercase' }}>
               Verkeer · {currentIndex + 1}/{traffic.length || 1}
             </div>
             {traffic.length > 0 ? (
               <div key={currentIndex} className="traffic-pop">
-                {size === 'wide' ? (
+                {(size === 'wide' || size === 'slim') ? (
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <div style={{
-                      display: 'inline-block',
-                      background: 'var(--primary-color)',
-                      color: '#fff',
-                      padding: '1px 6px',
-                      borderRadius: '4px',
-                      fontSize: '0.6rem',
-                      fontWeight: '950',
-                      flexShrink: 0
-                    }}>{traffic[currentIndex].road}</div>
+                    <div style={{ display: 'inline-block', background: 'var(--primary-color)', color: '#fff', padding: '1px 6px', borderRadius: '4px', fontSize: '0.6rem', fontWeight: '950', flexShrink: 0 }}>
+                      {traffic[currentIndex].road}
+                    </div>
                     <div style={{ fontSize: '0.62rem', fontWeight: '700', color: 'rgba(0,0,0,0.8)', lineHeight: 1.3 }}>
                       {traffic[currentIndex].msg}
                     </div>
                   </div>
                 ) : (
                   <>
-                    <div style={{
-                      display: 'inline-block',
-                      background: 'var(--primary-color)',
-                      color: '#fff',
-                      padding: '1px 6px',
-                      borderRadius: '4px',
-                      fontSize: '0.6rem',
-                      fontWeight: '950',
-                      marginBottom: '4px'
-                    }}>{traffic[currentIndex].road}</div>
-                    <div style={{
-                      fontSize: '0.62rem',
-                      fontWeight: '700',
-                      color: 'rgba(0,0,0,0.8)',
-                      lineHeight: 1.3
-                    }}>{traffic[currentIndex].msg}</div>
+                    <div style={{ display: 'inline-block', background: 'var(--primary-color)', color: '#fff', padding: '1px 6px', borderRadius: '4px', fontSize: '0.6rem', fontWeight: '950', marginBottom: '4px' }}>
+                      {traffic[currentIndex].road}
+                    </div>
+                    <div style={{ fontSize: '0.62rem', fontWeight: '700', color: 'rgba(0,0,0,0.8)', lineHeight: 1.3 }}>
+                      {traffic[currentIndex].msg}
+                    </div>
                   </>
                 )}
               </div>
@@ -264,24 +389,8 @@ export const TrafficWidget = ({ size, onResizeStart }) => {
         ) : (
           <>
             {traffic.slice(0, itemsToShow).map((item, idx) => (
-              <div key={idx} style={{
-                fontSize: '0.75rem',
-                background: 'rgba(0,100,255,0.03)',
-                padding: '10px 14px',
-                borderRadius: '14px',
-                border: '1px solid rgba(0,0,0,0.05)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px'
-              }}>
-                <span style={{
-                  background: 'var(--primary-color)',
-                  color: '#fff',
-                  padding: '2px 8px',
-                  borderRadius: '6px',
-                  fontWeight: '950',
-                  fontSize: '0.65rem'
-                }}>{item.road}</span>
+              <div key={idx} style={{ fontSize: '0.75rem', background: 'rgba(0,100,255,0.03)', padding: '10px 14px', borderRadius: '14px', border: '1px solid rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span style={{ background: 'var(--primary-color)', color: '#fff', padding: '2px 8px', borderRadius: '6px', fontWeight: '950', fontSize: '0.65rem' }}>{item.road}</span>
                 <span style={{ color: 'rgba(0,0,0,0.85)', fontWeight: '750' }}>{item.msg}</span>
               </div>
             ))}

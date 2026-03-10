@@ -236,7 +236,7 @@ const Admin = ({ data, onSave, onClose }) => {
                   <div className="input-group">
                     <label>Formaat (iOS Stijl)</label>
                     <div style={{ display: 'flex', gap: '10px' }}>
-                      {['small', 'wide', 'medium', 'xlarge', 'large'].map(size => (
+                      {['small', 'compact', 'slim', 'wide', 'medium', 'xlarge', 'large'].map(size => (
                         <button
                           key={size}
                           type="button"
