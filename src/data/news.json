@@ -1,0 +1,139 @@
+{
+  "featured": [
+    {
+      "id": 1,
+      "title": "Oostendorp BYD is Here!",
+      "description": "Vestiging Roermond geopend (02-02-2026) en Den Bosch (03-02-2026). Ontdek Build Your Dreams!",
+      "foregroundImage": "https://davevera.nl/wp-content/uploads/2026/01/BYD.png",
+      "backgroundImage": "",
+      "backgroundColor": "#001a33",
+      "category": "BYD",
+      "splitRatio": 50
+    },
+    {
+      "id": 7,
+      "title": "Toyota bZ4X Touring",
+      "description": "Toyota breidt zijn elektrische aanbod uit met de nieuwe bZ4X Touring, een ruimere en praktischere variant van de bZ4X. Het model is vooral gericht op gezinnen en rijders die extra bagageruimte, comfort en gebruiksgemak zoeken.\n\nDe bZ4X Touring biedt meer laadruimte en een elektrische actieradius tot 591 kilometer WLTP, afhankelijk van de uitvoering. Daarmee positioneert Toyota deze nieuwe SUV als een sterke, ruime EV voor dagelijks gebruik en langere ritten.",
+      "videoUrl": "https://davevera.nl/wp-content/uploads/2026/03/BZ4X_TOURING_NG_SALES_DESIGN-0x1080-3000k.mp4",
+      "foregroundImage": "",
+      "backgroundImage": "",
+      "backgroundColor": "#0a0f1a",
+      "category": "Toyota",
+      "splitRatio": 55
+    },
+    {
+      "id": 2,
+      "title": "Welkom Kjell, Sabine & Kim!",
+      "description": "We mogen maar liefst 3 nieuwe collega's verwelkomen! Kjell, Sabine en Kim starten per 1 april. Geef ze een warm welkom en laten we er samen voor zorgen dat ze zich zo snel mogelijk thuis voelen en kunnen meedraaien als volwaardig collega. Yay!",
+      "foregroundImage": "",
+      "backgroundImage": "",
+      "backgroundColor": "#0a2a1a",
+      "category": "Nieuws",
+      "splitRatio": 50
+    },
+    {
+      "id": 6,
+      "title": "Bandenwissels op volle toeren!",
+      "description": "De bandenwissels zijn weer op volle toeren bezig dit seizoen.\n\nDe ritten vinden 3 keer per week plaats: op maandag, woensdag en vrijdag.\n\nIn week 15 en week 18 (Pasen en Koningsdag) valt maandag af. Die weken rijden we op dinsdag en donderdag.",
+      "foregroundImage": "",
+      "backgroundImage": "",
+      "backgroundColor": "#1a1000",
+      "category": "Service",
+      "splitRatio": 50
+    },
+    {
+      "id": 3,
+      "title": "Nimble Status",
+      "description": "Graag erop letten dat iedereen de juiste status gebruikt in Nimble. Meld je aan zodra je begint en zet je status correct op bijvoorbeeld 'Aan het werk', 'Beschikbaar' of 'Niet beschikbaar'. Meld je ook altijd af via je eigen status; Nimble zet je callcenterstatus dan automatisch op afwezig.",
+      "foregroundImage": "",
+      "backgroundImage": "",
+      "backgroundColor": "#0d2137",
+      "category": "Belangrijk",
+      "splitRatio": 50
+    },
+    {
+      "id": 4,
+      "title": "Feedback via Teams",
+      "description": "Feedback verloopt voortaan via Teams. Alle vestigingen hebben hiervoor een eigen Teams-kanaal gekregen waarin feedback wordt gedeeld. Deze feedback wordt vervolgens direct doorgezet: óf naar belangrijke mededelingen, óf naar de desbetreffende persoon als het om individuele feedback gaat.\n\nZorg er daarom voor dat je feedback die je via deze weg ontvangt ook daadwerkelijk oppakt. De collega die de feedback doorstuurt, heeft deze ontvangen vanuit de vestiging. Ga hierover dus niet in discussie met de collega die het bericht doorzet, maar pak de feedback inhoudelijk op waar nodig.",
+      "foregroundImage": "",
+      "backgroundImage": "",
+      "backgroundColor": "#1a2637",
+      "category": "Mededeling",
+      "splitRatio": 50
+    },
+    {
+      "id": 5,
+      "title": "Teammeeting 7 mei",
+      "description": "Op 7 mei vindt de teammeeting plaats van 12:00 tot 17:00 uur. De agenda wordt op de dag zelf gedeeld. In ieder geval komt de Directeur Operations zich deze middag voorstellen.\n\nDe middag staat verder in het teken van teamspirit, samenwerken en constructief communiceren. Ook gaan we samen werken aan het opnieuw leven inblazen, aanscherpen en maken van gezamenlijke afspraken. Het doel hiervan is het versterken van de teambuilding, het creëren van meer structuur en rust op de werkvloer en het verminderen van onderlinge frustraties.",
+      "foregroundImage": "",
+      "backgroundImage": "",
+      "backgroundColor": "#0d1f0d",
+      "category": "Agenda",
+      "splitRatio": 50
+    },
+    {
+      "id": 8,
+      "title": "Rode dashboardlampjes",
+      "description": "",
+      "foregroundImage": "https://davevera.nl/wp-content/uploads/2026/03/Rodedashlampjes.png",
+      "backgroundImage": "",
+      "backgroundColor": "#1a0000",
+      "category": "Service",
+      "imageOnly": true,
+      "duration": 20000
+    },
+    {
+      "id": 9,
+      "title": "Oranje dashboardlampjes",
+      "description": "",
+      "foregroundImage": "https://davevera.nl/wp-content/uploads/2026/03/oranjedashlampjes.png",
+      "backgroundImage": "",
+      "backgroundColor": "#1a0800",
+      "category": "Service",
+      "imageOnly": true,
+      "duration": 20000
+    },
+    {
+      "id": 10,
+      "title": "Groene dashboardlampjes",
+      "description": "",
+      "foregroundImage": "https://davevera.nl/wp-content/uploads/2026/03/groene-dashlampjes.png",
+      "backgroundImage": "",
+      "backgroundColor": "#001a00",
+      "category": "Service",
+      "imageOnly": true,
+      "duration": 20000
+    }
+  ],
+  "ticker": [],
+  "rssSources": [],
+  "webSources": [
+    {
+      "url": "https://www.oostendorpautomotive.nl/particulieren/nieuwsoverzicht",
+      "selector": "h3",
+      "prefix": "[OOSTENDORP]",
+      "limit": 20
+    }
+  ],
+  "widgets": [
+    {
+      "id": "w-weather",
+      "type": "weather",
+      "name": "Weer Uden",
+      "px": 20,
+      "py": 20,
+      "size": "medium",
+      "isVisible": true
+    },
+    {
+      "id": "w-traffic",
+      "type": "traffic",
+      "name": "Verkeer",
+      "px": 1120,
+      "py": 20,
+      "size": "medium",
+      "isVisible": true
+    }
+  ],
+  "traffic": []
+}
