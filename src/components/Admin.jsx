@@ -48,11 +48,11 @@ const Admin = ({ data, onSave, onClose }) => {
            <h1 style={{ color: 'var(--primary-color)', margin: 0, fontSize: '2.5rem', fontWeight: '900' }}>Master Control</h1>
            <p style={{ opacity: 0.5, margin: 0, letterSpacing: '1px' }}>BEHEER NIEUWS, TICKER EN WIDGETS</p>
         </div>
-        <button onClick={onClose} style={{ 
-          background: 'rgba(0,0,0,0.05)', 
-          border: '1px solid rgba(0,0,0,0.1)', 
-          color: '#000', 
-          padding: '12px 40px', 
+        <button onClick={onClose} style={{
+          background: 'rgba(0,0,0,0.05)',
+          border: '1px solid rgba(0,0,0,0.1)',
+          color: '#000',
+          padding: '12px 40px',
           borderRadius: '100px',
           fontWeight: 'bold',
           cursor: 'pointer',
@@ -72,16 +72,78 @@ const Admin = ({ data, onSave, onClose }) => {
             {news.map(item => (
               <div key={item.id} className="admin-card glass" style={{ padding: '30px', background: 'rgba(0,0,0,0.03)', borderRadius: '24px', position: 'relative', height: 'auto', width: 'auto' }}>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '25px' }}>
-                  <div className="input-group"><label>Titel</label><input value={item.title} onChange={e => handleNewsChange(item.id, 'title', e.target.value)} /></div>
-                  <div className="input-group"><label>Categorie</label><input value={item.category} onChange={e => handleNewsChange(item.id, 'category', e.target.value)} /></div>
-                  <div className="input-group" style={{ gridColumn: 'span 2' }}><label>Omschrijving</label><textarea value={item.description} onChange={e => handleNewsChange(item.id, 'description', e.target.value)} rows="3" /></div>
-                  <div className="input-group"><label>Voorgrond Afbeelding (URL)</label><input value={item.foregroundImage} onChange={e => handleNewsChange(item.id, 'foregroundImage', e.target.value)} /></div>
-                  <div className="input-group"><label>Achtergrond Afbeelding (URL)</label><input value={item.backgroundImage} onChange={e => handleNewsChange(item.id, 'backgroundImage', e.target.value)} /></div>
-                  <div className="input-group"><label>Achtergrond Kleur (Hex)</label><input value={item.backgroundColor} onChange={e => handleNewsChange(item.id, 'backgroundColor', e.target.value)} /></div>
-                  <div className="input-group" style={{ gridColumn: 'span 2' }}>
-                    <label>Verdeling Beeld / Tekst ({item.splitRatio || 50}%)</label>
-                    <input type="range" min="20" max="80" value={item.splitRatio || 50} onChange={e => handleNewsChange(item.id, 'splitRatio', parseInt(e.target.value))} />
+
+                  {/* Titel + Categorie */}
+                  <div className="input-group">
+                    <label>Titel</label>
+                    <input value={item.title} onChange={e => handleNewsChange(item.id, 'title', e.target.value)} />
                   </div>
+                  <div className="input-group">
+                    <label>Categorie</label>
+                    <input value={item.category} onChange={e => handleNewsChange(item.id, 'category', e.target.value)} />
+                  </div>
+
+                  {/* Beschrijving — verborgen bij volledig scherm */}
+                  {!item.imageOnly && (
+                    <div className="input-group" style={{ gridColumn: 'span 2' }}>
+                      <label>Omschrijving</label>
+                      <textarea value={item.description} onChange={e => handleNewsChange(item.id, 'description', e.target.value)} rows="3" />
+                    </div>
+                  )}
+
+                  {/* Media: afbeelding + video */}
+                  <div className="input-group">
+                    <label>Afbeelding URL</label>
+                    <input value={item.foregroundImage} onChange={e => handleNewsChange(item.id, 'foregroundImage', e.target.value)} placeholder="https://..." />
+                  </div>
+                  {!item.imageOnly && (
+                    <div className="input-group">
+                      <label>Video URL (.mp4)</label>
+                      <input value={item.videoUrl || ''} onChange={e => handleNewsChange(item.id, 'videoUrl', e.target.value)} placeholder="https://..." />
+                    </div>
+                  )}
+
+                  {/* Achtergrond */}
+                  <div className="input-group">
+                    <label>Achtergrond Afbeelding URL</label>
+                    <input value={item.backgroundImage} onChange={e => handleNewsChange(item.id, 'backgroundImage', e.target.value)} placeholder="https://..." />
+                  </div>
+                  <div className="input-group">
+                    <label>Achtergrond Kleur (Hex)</label>
+                    <input value={item.backgroundColor} onChange={e => handleNewsChange(item.id, 'backgroundColor', e.target.value)} />
+                  </div>
+
+                  {/* Volledig scherm toggle */}
+                  <div
+                    style={{ gridColumn: 'span 2', display: 'flex', alignItems: 'center', gap: '14px', padding: '16px 20px', background: item.imageOnly ? 'rgba(0,172,169,0.08)' : 'rgba(0,0,0,0.03)', borderRadius: '16px', border: `1px solid ${item.imageOnly ? 'rgba(0,172,169,0.3)' : 'rgba(0,0,0,0.07)'}`, cursor: 'pointer' }}
+                    onClick={() => handleNewsChange(item.id, 'imageOnly', !item.imageOnly)}
+                  >
+                    <input type="checkbox" checked={!!item.imageOnly} onChange={() => {}} style={{ width: '20px', height: '20px', pointerEvents: 'none', accentColor: 'var(--primary-color)' }} />
+                    <div>
+                      <div style={{ fontWeight: 800, fontSize: '0.85rem' }}>Volledig scherm afbeelding</div>
+                      <div style={{ fontSize: '0.75rem', opacity: 0.5 }}>Toont alleen de afbeelding zonder tekst of video</div>
+                    </div>
+                  </div>
+
+                  {/* Opties alleen zichtbaar als NIET volledig scherm */}
+                  {!item.imageOnly && (
+                    <>
+                      <div className="input-group" style={{ gridColumn: 'span 2' }}>
+                        <label>Verdeling Beeld / Tekst ({item.splitRatio || 50}%)</label>
+                        <input type="range" min="20" max="80" value={item.splitRatio || 50} onChange={e => handleNewsChange(item.id, 'splitRatio', parseInt(e.target.value))} />
+                      </div>
+                      <div className="input-group">
+                        <label>Titel tekstgrootte ({(item.titleSize || 5).toFixed(1)} rem)</label>
+                        <input type="range" min="2" max="8" step="0.5" value={item.titleSize || 5} onChange={e => handleNewsChange(item.id, 'titleSize', parseFloat(e.target.value))} />
+                      </div>
+                      <div className="input-group">
+                        <label>Tekst tekstgrootte ({(item.descSize || 1.6).toFixed(1)} rem)</label>
+                        <input type="range" min="0.8" max="3" step="0.1" value={item.descSize || 1.6} onChange={e => handleNewsChange(item.id, 'descSize', parseFloat(e.target.value))} />
+                      </div>
+                    </>
+                  )}
+
+                  {/* Afbeelding positionering */}
                   {item.foregroundImage && (
                     <div style={{ gridColumn: 'span 2' }}>
                       <label style={{ display: 'block', fontSize: '0.8rem', color: 'rgba(0,0,0,0.5)', textTransform: 'uppercase', marginBottom: '12px', letterSpacing: '1.5px', fontWeight: 800 }}>Afbeelding Positionering</label>
@@ -115,6 +177,7 @@ const Admin = ({ data, onSave, onClose }) => {
                       </div>
                     </div>
                   )}
+
                 </div>
               </div>
             ))}
@@ -166,15 +229,15 @@ const Admin = ({ data, onSave, onClose }) => {
                     <input type="checkbox" checked={w.isVisible} onChange={e => handleWidgetChange(w.id, 'isVisible', e.target.checked)} style={{ width: '24px', height: '24px' }} />
                   </div>
                 </div>
-                
+
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
                   <p style={{ fontSize: '0.8rem', opacity: 0.6, margin: 0 }}>Tip: Versleep en verschaal widgets direct op het dashboard voor iOS-stijl adaptiviteit.</p>
-                  
+
                   <div className="input-group">
                     <label>Formaat (iOS Stijl)</label>
                     <div style={{ display: 'flex', gap: '10px' }}>
                       {['small', 'wide', 'medium', 'xlarge', 'large'].map(size => (
-                        <button 
+                        <button
                           key={size}
                           type="button"
                           onClick={() => handleWidgetChange(w.id, 'size', size)}

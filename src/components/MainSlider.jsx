@@ -57,18 +57,20 @@ const MainSlider = ({ slides, duration = 12000 }) => {
               <div className="full-screen-news-grid" style={{ gridTemplateColumns: `${ratio}vw ${100 - ratio}vw` }}>
                 <div className="news-visual">
                   <video
+                    key={slide.videoUrl}
                     src={slide.videoUrl}
                     autoPlay
                     loop
                     muted
                     playsInline
+                    onCanPlay={(e) => e.target.play()}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                   {slide.category && <span className="category-tag-large">{slide.category}</span>}
                 </div>
                 <div className="news-copy">
-                  <h1 className="news-title">{slide.title}</h1>
-                  <p className="news-description">{slide.description}</p>
+                  <h1 className="news-title" style={slide.titleSize ? { fontSize: `${slide.titleSize}rem` } : undefined}>{slide.title}</h1>
+                  <p className="news-description" style={slide.descSize ? { fontSize: `${slide.descSize}rem` } : undefined}>{slide.description}</p>
                 </div>
               </div>
             ) : hasImage ? (
@@ -85,15 +87,15 @@ const MainSlider = ({ slides, duration = 12000 }) => {
                   </div>
                 </div>
                 <div className="news-copy">
-                  <h1 className="news-title">{slide.title}</h1>
-                  <p className="news-description">{slide.description}</p>
+                  <h1 className="news-title" style={slide.titleSize ? { fontSize: `${slide.titleSize}rem` } : undefined}>{slide.title}</h1>
+                  <p className="news-description" style={slide.descSize ? { fontSize: `${slide.descSize}rem` } : undefined}>{slide.description}</p>
                 </div>
               </div>
             ) : (
               <div className="text-only-layout">
                 {slide.category && <span className="category-tag-text">{slide.category}</span>}
-                <h1 className="news-title-text">{slide.title}</h1>
-                <p className="news-description-text">{slide.description}</p>
+                <h1 className="news-title-text" style={slide.titleSize ? { fontSize: `${slide.titleSize}rem` } : undefined}>{slide.title}</h1>
+                <p className="news-description-text" style={slide.descSize ? { fontSize: `${slide.descSize}rem` } : undefined}>{slide.description}</p>
               </div>
             )}
           </div>
