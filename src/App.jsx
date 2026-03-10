@@ -71,7 +71,7 @@ function App() {
   useEffect(() => {
     const loadRemote = async () => {
       const data = await fetchRemoteNews();
-      if (data) setNewsData(applyLocalWidgetPositions(data));
+      if (data) setNewsData(data); // Server is leidend, inclusief widget posities
     };
     loadRemote();
     const interval = setInterval(loadRemote, 3 * 60 * 1000); // elke 3 minuten
@@ -222,11 +222,14 @@ function App() {
           return w;
         });
         saveWidgetStates(newWidgets);
-        return { ...prev, widgets: newWidgets };
+        const newData = { ...prev, widgets: newWidgets };
+        saveRemoteNews(newData); // Sync widget positie naar alle schermen
+        return newData;
       });
     } else if (resizingWidget) {
       setNewsData(prev => {
         saveWidgetStates(prev.widgets);
+        saveRemoteNews(prev); // Sync widget grootte naar alle schermen
         return prev;
       });
     }
