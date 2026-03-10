@@ -1,5 +1,6 @@
 node_modules/
 dist/
+oo-news.php
 build_log.txt
 .env
 .env.local

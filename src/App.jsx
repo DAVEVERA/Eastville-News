@@ -6,13 +6,77 @@ import MainSlider from './components/MainSlider';
 import { WeatherWidget, TrafficWidget } from './components/Widgets';
 import Admin from './components/Admin';
 import { fetchRSS, fetchWebTitles } from './dataService';
+// './firebase' wordt niet meer gebruikt — sync loopt via davevera.nl
 
-const SNAP = 20; // snap elke 20px
+// Eigen server als gedeelde databron (synct alle schermen)
+const NEWS_API_URL = 'https://davevera.nl/oo-news.php';
+const NEWS_API_KEY = 'oo2026admin'; // Zelfde als in oo-news.php
+
+const fetchRemoteNews = async () => {
+  try {
+    const res = await fetch(NEWS_API_URL);
+    if (!res.ok) return null;
+    const data = await res.json();
+    return Object.keys(data).length ? data : null;
+  } catch {
+    return null;
+  }
+};
+
+const saveRemoteNews = async (data) => {
+  try {
+    await fetch(`${NEWS_API_URL}?key=${NEWS_API_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+  } catch (err) {
+    console.error('Opslaan mislukt:', err);
+  }
+};
+
+const SNAP = 20;
+const WIDGET_STORAGE_KEY = 'oo_widget_states';
+
+// Merge Firebase/base data with per-screen widget positions from localStorage
+const applyLocalWidgetPositions = (data) => {
+  try {
+    const saved = localStorage.getItem(WIDGET_STORAGE_KEY);
+    if (!saved) return data;
+    const positions = JSON.parse(saved);
+    return {
+      ...data,
+      widgets: (data.widgets || []).map(w => ({ ...w, ...(positions[w.id] || {}) }))
+    };
+  } catch {
+    return data;
+  }
+};
+
+const saveWidgetStates = (widgets) => {
+  try {
+    const states = {};
+    widgets.forEach(w => { states[w.id] = { px: w.px, py: w.py, size: w.size }; });
+    localStorage.setItem(WIDGET_STORAGE_KEY, JSON.stringify(states));
+  } catch {}
+};
 
 function App() {
-  const [newsData, setNewsData] = useState(initialNewsData);
+  // Start with bundled data + local widget positions until Firebase responds
+  const [newsData, setNewsData] = useState(() => applyLocalWidgetPositions(initialNewsData));
   const [tickerItems, setTickerItems] = useState(initialNewsData.ticker);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
+
+  // Fetch from server on load and poll every 3 minutes — syncs all screens
+  useEffect(() => {
+    const loadRemote = async () => {
+      const data = await fetchRemoteNews();
+      if (data) setNewsData(applyLocalWidgetPositions(data));
+    };
+    loadRemote();
+    const interval = setInterval(loadRemote, 3 * 60 * 1000); // elke 3 minuten
+    return () => clearInterval(interval);
+  }, []);
   
   // RSS Fetching Logic
   useEffect(() => {
@@ -50,6 +114,12 @@ function App() {
     return () => clearInterval(interval);
   }, [newsData.ticker, newsData.rssSources, newsData.webSources]);
 
+  // Auto-reload every 30 minutes to pick up newly deployed content
+  useEffect(() => {
+    const timer = setTimeout(() => window.location.reload(), 30 * 60 * 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
   const [adminCounter, setAdminCounter] = useState(0);
   const [draggingWidget, setDraggingWidget] = useState(null);
   const [resizingWidget, setResizingWidget] = useState(null);
@@ -66,6 +136,7 @@ function App() {
   };
 
   const handleSaveData = (newData) => {
+    saveRemoteNews(newData); // Schrijft naar davevera.nl — alle schermen pikken dit op binnen 3 min
     setNewsData(newData);
     setIsAdminOpen(false);
   };
@@ -142,16 +213,22 @@ function App() {
 
   const onMouseUp = () => {
     if (draggingWidget) {
-      setNewsData(prev => ({
-        ...prev,
-        widgets: prev.widgets.map(w => {
+      setNewsData(prev => {
+        const newWidgets = prev.widgets.map(w => {
           if (w.id === draggingWidget) {
             const { tempX, tempY, gridX, gridY, ...cleanWidget } = w;
             return { ...cleanWidget, px: tempX ?? w.px, py: tempY ?? w.py };
           }
           return w;
-        })
-      }));
+        });
+        saveWidgetStates(newWidgets);
+        return { ...prev, widgets: newWidgets };
+      });
+    } else if (resizingWidget) {
+      setNewsData(prev => {
+        saveWidgetStates(prev.widgets);
+        return prev;
+      });
     }
     setDraggingWidget(null);
     setResizingWidget(null);

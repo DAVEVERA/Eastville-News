@@ -48,7 +48,8 @@ const MainSlider = ({ slides, duration = 12000 }) => {
                     maxWidth: '92%',
                     maxHeight: '92%',
                     objectFit: 'contain',
-                    filter: 'drop-shadow(0 20px 60px rgba(0,0,0,0.25))'
+                    filter: 'drop-shadow(0 20px 60px rgba(0,0,0,0.25))',
+                    transform: `scale(${slide.imageScale || 1}) translate(${slide.imageOffsetX || 0}%, ${slide.imageOffsetY || 0}%)`
                   }}
                 />
               </div>
@@ -74,7 +75,12 @@ const MainSlider = ({ slides, duration = 12000 }) => {
               <div className="full-screen-news-grid" style={{ gridTemplateColumns: `${ratio}vw ${100 - ratio}vw` }}>
                 <div className="news-visual">
                   <div className="hero-image-wrapper">
-                    <img src={slide.foregroundImage} alt={slide.title} className="hero-image" />
+                    <img
+                      src={slide.foregroundImage}
+                      alt={slide.title}
+                      className="hero-image"
+                      style={{ transform: `scale(${slide.imageScale || 1}) translate(${slide.imageOffsetX || 0}%, ${slide.imageOffsetY || 0}%)` }}
+                    />
                     <span className="category-tag-large">{slide.category}</span>
                   </div>
                 </div>

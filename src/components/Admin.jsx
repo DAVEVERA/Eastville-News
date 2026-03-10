@@ -17,12 +17,13 @@ const Admin = ({ data, onSave, onClose }) => {
 
   const handleSave = (e) => {
     e.preventDefault();
-    onSave({ 
-      featured: news, 
-      ticker: ticker, 
+    onSave({
+      featured: news,
+      ticker: ticker,
       rssSources: rssSources,
+      webSources: data.webSources || [],
       widgets: widgets,
-      traffic: data.traffic 
+      traffic: data.traffic
     });
   };
 
@@ -81,6 +82,39 @@ const Admin = ({ data, onSave, onClose }) => {
                     <label>Verdeling Beeld / Tekst ({item.splitRatio || 50}%)</label>
                     <input type="range" min="20" max="80" value={item.splitRatio || 50} onChange={e => handleNewsChange(item.id, 'splitRatio', parseInt(e.target.value))} />
                   </div>
+                  {item.foregroundImage && (
+                    <div style={{ gridColumn: 'span 2' }}>
+                      <label style={{ display: 'block', fontSize: '0.8rem', color: 'rgba(0,0,0,0.5)', textTransform: 'uppercase', marginBottom: '12px', letterSpacing: '1.5px', fontWeight: 800 }}>Afbeelding Positionering</label>
+                      <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
+                        <div style={{ width: '160px', height: '120px', overflow: 'hidden', borderRadius: '12px', background: '#111', flexShrink: 0 }}>
+                          <img
+                            src={item.foregroundImage}
+                            alt=""
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'contain',
+                              transform: `scale(${item.imageScale || 1}) translate(${item.imageOffsetX || 0}%, ${item.imageOffsetY || 0}%)`
+                            }}
+                          />
+                        </div>
+                        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                          <div className="input-group">
+                            <label>Zoom ({(item.imageScale || 1).toFixed(2)}×)</label>
+                            <input type="range" min="0.5" max="2" step="0.05" value={item.imageScale || 1} onChange={e => handleNewsChange(item.id, 'imageScale', parseFloat(e.target.value))} />
+                          </div>
+                          <div className="input-group">
+                            <label>Horizontaal ({item.imageOffsetX || 0}%)</label>
+                            <input type="range" min="-50" max="50" value={item.imageOffsetX || 0} onChange={e => handleNewsChange(item.id, 'imageOffsetX', parseInt(e.target.value))} />
+                          </div>
+                          <div className="input-group">
+                            <label>Verticaal ({item.imageOffsetY || 0}%)</label>
+                            <input type="range" min="-50" max="50" value={item.imageOffsetY || 0} onChange={e => handleNewsChange(item.id, 'imageOffsetY', parseInt(e.target.value))} />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -139,7 +173,7 @@ const Admin = ({ data, onSave, onClose }) => {
                   <div className="input-group">
                     <label>Formaat (iOS Stijl)</label>
                     <div style={{ display: 'flex', gap: '10px' }}>
-                      {['small', 'medium', 'large'].map(size => (
+                      {['small', 'wide', 'medium', 'xlarge', 'large'].map(size => (
                         <button 
                           key={size}
                           type="button"
@@ -164,10 +198,10 @@ const Admin = ({ data, onSave, onClose }) => {
                   </div>
 
                   <div className="input-group" style={{ opacity: 0.5 }}>
-                    <label>Grid Positie (Automatisch bij slepen)</label>
+                    <label>Positie (Automatisch bij slepen)</label>
                     <div style={{ display: 'flex', gap: '15px' }}>
-                      <div>X: {w.gridX}</div>
-                      <div>Y: {w.gridY}</div>
+                      <div>X: {w.px ?? 0}px</div>
+                      <div>Y: {w.py ?? 0}px</div>
                     </div>
                   </div>
                 </div>
