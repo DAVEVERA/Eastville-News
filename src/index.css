@@ -60,7 +60,7 @@ body {
 }
 
 .widget {
-  animation: widgetIn 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+  animation: widgetIn 0.8s cubic-bezier(0.23, 1, 0.32, 1);
   cursor: grab;
   position: absolute;
 }
@@ -116,11 +116,11 @@ body {
 @keyframes widgetIn {
   from {
     opacity: 0;
-    transform: translateY(-20px) blur(10px);
+    transform: translateY(-20px);
   }
   to {
     opacity: 1;
-    transform: translateY(0) blur(0);
+    transform: none;
   }
 }
 

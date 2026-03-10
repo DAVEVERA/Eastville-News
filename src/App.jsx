@@ -283,7 +283,7 @@ function App() {
                   top: `${top}px`,
                   zIndex: (draggingWidget === w.id || resizingWidget === w.id) ? 2000 : 1000,
                   pointerEvents: 'auto',
-                  transition: (draggingWidget === w.id || resizingWidget === w.id) ? 'none' : 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)',
+                  transition: (draggingWidget === w.id || resizingWidget === w.id) ? 'none' : 'left 0.6s cubic-bezier(0.23, 1, 0.32, 1), top 0.6s cubic-bezier(0.23, 1, 0.32, 1)',
                   userSelect: 'none'
                 }}
               >
