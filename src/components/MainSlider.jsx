@@ -32,7 +32,6 @@ const MainSlider = ({ slides, duration = 12000 }) => {
 
   return (
     <div className="main-slider" style={bgStyle}>
-      <div className="bg-overlay-gradient"></div>
       {slides.map((slide, index) => {
         const ratio = slide.splitRatio || 45;
         const hasImage = !!slide.foregroundImage;
