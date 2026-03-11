@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { config } from './config';
 import initialNewsData from './data/news.json';
 import NewsTicker from './components/NewsTicker';
@@ -71,7 +71,13 @@ function App() {
   useEffect(() => {
     const loadRemote = async () => {
       const data = await fetchRemoteNews();
-      if (data) setNewsData(data); // Server is leidend, inclusief widget posities
+      if (data) {
+        const serialized = JSON.stringify(data.featured);
+        if (serialized !== lastRemoteRef.current) {
+          lastRemoteRef.current = serialized;
+          setNewsData(applyLocalWidgetPositions(data));
+        }
+      }
     };
     loadRemote();
     const interval = setInterval(loadRemote, 3 * 60 * 1000); // elke 3 minuten
@@ -120,6 +126,7 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
+  const lastRemoteRef = useRef(null);
   const [adminCounter, setAdminCounter] = useState(0);
   const [draggingWidget, setDraggingWidget] = useState(null);
   const [resizingWidget, setResizingWidget] = useState(null);

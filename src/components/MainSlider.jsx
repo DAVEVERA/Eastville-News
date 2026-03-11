@@ -3,16 +3,24 @@ import './MainSlider.css';
 
 const MainSlider = ({ slides, duration = 12000 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const slidesRef = React.useRef(slides);
+
+  // Keep ref in sync without resetting the timer
+  useEffect(() => {
+    slidesRef.current = slides;
+    // Clamp index if slides shrunk
+    if (currentIndex >= slides.length) setCurrentIndex(0);
+  }, [slides]);
 
   // Per-slide duration: each slide can override the default via a duration field
   useEffect(() => {
-    if (!slides || slides.length === 0) return;
-    const currentDuration = slides[currentIndex]?.duration || duration;
+    if (!slidesRef.current || slidesRef.current.length === 0) return;
+    const currentDuration = slidesRef.current[currentIndex]?.duration || duration;
     const timer = setTimeout(() => {
-      setCurrentIndex((prev) => (prev + 1) % slides.length);
+      setCurrentIndex((prev) => (prev + 1) % slidesRef.current.length);
     }, currentDuration);
     return () => clearTimeout(timer);
-  }, [currentIndex, slides, duration]);
+  }, [currentIndex, duration]);
 
   if (!slides || slides.length === 0) return null;
 
