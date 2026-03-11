@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './NewsTicker.css';
 
-const Clock = () => {
+const Clock = ({ location = 'UDEN' }) => {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -11,20 +11,31 @@ const Clock = () => {
 
   return (
     <div className="ticker-clock">
-      <span className="location">UDEN</span>
+      <span className="location">{location.toUpperCase()}</span>
       <span className="time">{time.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })}</span>
     </div>
   );
 };
 
-const NewsTicker = ({ items, speed = 30 }) => {
-  // Adaptive duration: ~0.15s per character so longer content scrolls for longer
+const NewsTicker = ({ items, speed = 30, location = 'UDEN' }) => {
+  if (!items || items.length === 0) {
+    return (
+      <div className="ticker-container">
+        <Clock location={location} />
+        <div className="ticker-wrap" style={{ opacity: 0.4, paddingLeft: '20px', color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>
+          Nieuws laden...
+        </div>
+        <div className="ticker-label">LAATSTE NIEUWS</div>
+      </div>
+    );
+  }
+
   const charCount = items.reduce((sum, item) => sum + item.length, 0);
   const duration = Math.max(speed, Math.round(charCount * 0.15));
 
   return (
     <div className="ticker-container">
-      <Clock />
+      <Clock location={location} />
       <div className="ticker-wrap">
         <div className="ticker" style={{ animationDuration: `${duration}s` }}>
           {items.map((item, index) => (
@@ -47,4 +58,3 @@ const NewsTicker = ({ items, speed = 30 }) => {
 };
 
 export default NewsTicker;
-

@@ -6,11 +6,10 @@ import MainSlider from './components/MainSlider';
 import { WeatherWidget, TrafficWidget, SmartStackWidget } from './components/Widgets';
 import Admin from './components/Admin';
 import { fetchRSS, fetchWebTitles } from './dataService';
-// './firebase' wordt niet meer gebruikt — sync loopt via davevera.nl
 
 // Eigen server als gedeelde databron (synct alle schermen)
 const NEWS_API_URL = 'https://davevera.nl/oo-news.php';
-const NEWS_API_KEY = 'oo2026admin'; // Zelfde als in oo-news.php
+const NEWS_API_KEY = 'oo2026admin';
 
 const fetchRemoteNews = async () => {
   try {
@@ -38,7 +37,6 @@ const saveRemoteNews = async (data) => {
 const SNAP = 20;
 const WIDGET_STORAGE_KEY = 'oo_widget_states';
 
-// Merge Firebase/base data with per-screen widget positions from localStorage
 const applyLocalWidgetPositions = (data) => {
   try {
     const saved = localStorage.getItem(WIDGET_STORAGE_KEY);
@@ -61,18 +59,25 @@ const saveWidgetStates = (widgets) => {
   } catch {}
 };
 
+// Serialize everything except widget positions (those are per-screen via localStorage)
+const serializeForComparison = (data) => {
+  const { widgets, ...rest } = data;
+  return JSON.stringify(rest);
+};
+
 function App() {
-  // Start with bundled data + local widget positions until Firebase responds
   const [newsData, setNewsData] = useState(() => applyLocalWidgetPositions(initialNewsData));
   const [tickerItems, setTickerItems] = useState(initialNewsData.ticker);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
+
+  const lastRemoteRef = useRef(null);
 
   // Fetch from server on load and poll every 3 minutes — syncs all screens
   useEffect(() => {
     const loadRemote = async () => {
       const data = await fetchRemoteNews();
       if (data) {
-        const serialized = JSON.stringify(data.featured);
+        const serialized = serializeForComparison(data);
         if (serialized !== lastRemoteRef.current) {
           lastRemoteRef.current = serialized;
           setNewsData(applyLocalWidgetPositions(data));
@@ -80,43 +85,39 @@ function App() {
       }
     };
     loadRemote();
-    const interval = setInterval(loadRemote, 3 * 60 * 1000); // elke 3 minuten
+    const interval = setInterval(loadRemote, 3 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
-  
-  // RSS Fetching Logic
+
+  // RSS + Web title fetching in parallel
   useEffect(() => {
     const updateTicker = async () => {
-      let combined = [...newsData.ticker];
-      
-      if (newsData.rssSources && newsData.rssSources.length > 0) {
-        for (const source of newsData.rssSources) {
-          const url = typeof source === 'string' ? source : source.url;
-          const limit = typeof source === 'object' ? source.limit : undefined;
-          const prefix = typeof source === 'object' ? source.prefix : undefined;
-          if (!url) continue;
-          const feeds = await fetchRSS(url, limit);
-          const prefixed = prefix ? feeds.map(t => `${prefix} ${t}`) : feeds;
-          combined = [...combined, ...prefixed];
-        }
-      }
+      const base = [...newsData.ticker];
 
-      if (newsData.webSources && newsData.webSources.length > 0) {
-        for (const source of newsData.webSources) {
-          if (!source.url) continue;
-          const titles = await fetchWebTitles(source.url, source.selector || 'h3', source.limit || 20);
-          const prefixed = source.prefix
-            ? titles.map(t => `${source.prefix} ${t}`)
-            : titles;
-          combined = [...combined, ...prefixed];
-        }
-      }
+      const rssPromises = (newsData.rssSources || []).map(source => {
+        const url = typeof source === 'string' ? source : source.url;
+        const limit = typeof source === 'object' ? source.limit : undefined;
+        const prefix = typeof source === 'object' ? source.prefix : undefined;
+        if (!url) return Promise.resolve([]);
+        return fetchRSS(url, limit).then(feeds =>
+          prefix ? feeds.map(t => `${prefix} ${t}`) : feeds
+        );
+      });
 
+      const webPromises = (newsData.webSources || []).map(source => {
+        if (!source.url) return Promise.resolve([]);
+        return fetchWebTitles(source.url, source.selector || 'h3', source.limit || 20).then(titles =>
+          source.prefix ? titles.map(t => `${source.prefix} ${t}`) : titles
+        );
+      });
+
+      const results = await Promise.all([...rssPromises, ...webPromises]);
+      const combined = results.reduce((acc, items) => [...acc, ...items], base);
       setTickerItems(combined);
     };
 
     updateTicker();
-    const interval = setInterval(updateTicker, 600000); // 10 mins
+    const interval = setInterval(updateTicker, 600000);
     return () => clearInterval(interval);
   }, [newsData.ticker, newsData.rssSources, newsData.webSources]);
 
@@ -126,7 +127,6 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  const lastRemoteRef = useRef(null);
   const [adminCounter, setAdminCounter] = useState(0);
   const [draggingWidget, setDraggingWidget] = useState(null);
   const [resizingWidget, setResizingWidget] = useState(null);
@@ -143,7 +143,7 @@ function App() {
   };
 
   const handleSaveData = (newData) => {
-    saveRemoteNews(newData); // Schrijft naar davevera.nl — alle schermen pikken dit op binnen 3 min
+    saveRemoteNews(newData);
     setNewsData(newData);
     setIsAdminOpen(false);
   };
@@ -151,8 +151,7 @@ function App() {
   const onDragStart = (e, widgetId) => {
     if (isAdminOpen || resizingWidget) return;
     setDraggingWidget(widgetId);
-    
-    const widget = newsData.widgets.find(w => w.id === widgetId);
+
     const rect = e.currentTarget.getBoundingClientRect();
     setOffset({
       x: e.clientX - rect.left,
@@ -188,10 +187,9 @@ function App() {
     } else if (resizingWidget) {
       const deltaX = e.clientX - initialMousePos.x;
       const deltaY = e.clientY - initialMousePos.y;
-      
+
       let newSize = initialSize;
 
-      // Size chain: small ↔ compact ↔ slim ↔ wide ↔ medium ↔ xlarge ↔ large
       if (initialSize === 'small') {
         if (deltaX > 80) newSize = 'compact';
       } else if (initialSize === 'compact') {
@@ -216,7 +214,7 @@ function App() {
       if (newSize !== initialSize) {
         setNewsData(prev => ({
           ...prev,
-          widgets: prev.widgets.map(w => 
+          widgets: prev.widgets.map(w =>
             w.id === resizingWidget ? { ...w, size: newSize } : w
           )
         }));
@@ -236,13 +234,13 @@ function App() {
         });
         saveWidgetStates(newWidgets);
         const newData = { ...prev, widgets: newWidgets };
-        saveRemoteNews(newData); // Sync widget positie naar alle schermen
+        saveRemoteNews(newData);
         return newData;
       });
     } else if (resizingWidget) {
       setNewsData(prev => {
         saveWidgetStates(prev.widgets);
-        saveRemoteNews(prev); // Sync widget grootte naar alle schermen
+        saveRemoteNews(prev);
         return prev;
       });
     }
@@ -276,18 +274,18 @@ function App() {
           <div className="video-overlay"></div>
         </div>
       )}
-      
+
       <main className="dashboard-root">
         <MainSlider slides={newsData.featured} duration={config.animation.sliderDuration} />
-        
+
         <div className="widget-overlay-engine">
           {newsData.widgets?.filter(w => w.isVisible).map(w => {
             const left = draggingWidget === w.id && w.tempX !== undefined ? w.tempX : (w.px ?? 20);
-            const top = draggingWidget === w.id && w.tempY !== undefined ? w.tempY : (w.py ?? 20);
-            
+            const top  = draggingWidget === w.id && w.tempY !== undefined ? w.tempY : (w.py ?? 20);
+
             return (
-              <div 
-                key={w.id} 
+              <div
+                key={w.id}
                 className={`dynamic-widget-wrapper ${draggingWidget === w.id ? 'dragging' : ''} ${resizingWidget === w.id ? 'resizing' : ''}`}
                 onMouseDown={(e) => onDragStart(e, w.id)}
                 style={{
@@ -327,14 +325,18 @@ function App() {
       </main>
 
       <div onClick={handleAdminTrigger} className="ticker-footer">
-        <NewsTicker items={tickerItems} speed={config.animation.scrollSpeed} />
+        <NewsTicker
+          items={tickerItems}
+          speed={config.animation.scrollSpeed}
+          location={config.widgets.weatherLocation}
+        />
       </div>
 
       {isAdminOpen && (
-        <Admin 
-          data={newsData} 
-          onSave={handleSaveData} 
-          onClose={() => setIsAdminOpen(false)} 
+        <Admin
+          data={newsData}
+          onSave={handleSaveData}
+          onClose={() => setIsAdminOpen(false)}
         />
       )}
 

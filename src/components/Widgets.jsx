@@ -93,6 +93,9 @@ export const SmartStackWidget = ({ location, size, onResizeStart }) => {
     return () => clearInterval(t);
   }, []);
 
+  // Reset traffic index when traffic data changes to avoid out-of-bounds
+  useEffect(() => { setTrafficIdx(0); }, [traffic]);
+
   // Rotate traffic items every 3s when traffic card is shown
   useEffect(() => {
     if (activeCard === 2 && traffic.length > 1) {

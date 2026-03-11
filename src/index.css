@@ -19,7 +19,7 @@ body {
   font-family: var(--font-main);
   background-color: var(--bg-color);
   color: var(--text-color);
-  overflow: hidden; 
+  overflow: hidden;
   height: 100vh;
   width: 100vw;
   margin: 0;
@@ -30,7 +30,7 @@ body {
   width: 100vw;
 }
 
-/* Glassmorphism utility - Light Mode Adjustments */
+/* Glassmorphism utility */
 .glass {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(20px) saturate(180%);
@@ -39,7 +39,7 @@ body {
   border-top: 1px solid rgba(255, 255, 255, 0.8);
   border-radius: 24px;
   padding: 18px;
-  box-shadow: 
+  box-shadow:
     0 4px 6px rgba(0, 0, 0, 0.02),
     0 15px 35px rgba(0, 0, 0, 0.1),
     inset 0 0 0 1px rgba(255, 255, 255, 0.5);
@@ -51,10 +51,10 @@ body {
   flex-direction: column;
 }
 
+/* No translateY here — widgets use .glass and a hover-lift breaks drag offset calculation */
 .glass:hover {
   background: rgba(255, 255, 255, 0.85);
-  transform: translateY(-5px);
-  box-shadow: 
+  box-shadow:
     0 20px 40px rgba(0, 0, 0, 0.15),
     inset 0 0 0 1px rgba(255, 255, 255, 0.6);
 }
@@ -65,27 +65,13 @@ body {
   position: absolute;
 }
 
-/* Size Tiers */
-.size-small {
-  width: 110px;
-  height: auto;
-  min-height: 110px;
-  padding: 8px;
-  background: rgba(255, 255, 255, 0.22) !important;
-  -webkit-backdrop-filter: blur(32px) saturate(200%) !important;
-  backdrop-filter: blur(32px) saturate(200%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.55) !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.8) !important;
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.06),
-    0 8px 24px rgba(0, 0, 0, 0.08),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.4) !important;
-}
+/* ── Compact size tiers: shared glass look, only width/padding differs ── */
+.size-small,
+.size-compact,
+.size-slim,
 .size-wide {
-  width: 240px;
   height: auto;
   min-height: 110px;
-  padding: 10px;
   background: rgba(255, 255, 255, 0.22) !important;
   -webkit-backdrop-filter: blur(32px) saturate(200%) !important;
   backdrop-filter: blur(32px) saturate(200%) !important;
@@ -96,36 +82,12 @@ body {
     0 8px 24px rgba(0, 0, 0, 0.08),
     inset 0 0 0 1px rgba(255, 255, 255, 0.4) !important;
 }
-.size-compact {
-  width: 150px;
-  height: auto;
-  min-height: 110px;
-  padding: 10px;
-  background: rgba(255, 255, 255, 0.22) !important;
-  -webkit-backdrop-filter: blur(32px) saturate(200%) !important;
-  backdrop-filter: blur(32px) saturate(200%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.55) !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.8) !important;
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.06),
-    0 8px 24px rgba(0, 0, 0, 0.08),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.4) !important;
-}
-.size-slim {
-  width: 190px;
-  height: auto;
-  min-height: 110px;
-  padding: 10px;
-  background: rgba(255, 255, 255, 0.22) !important;
-  -webkit-backdrop-filter: blur(32px) saturate(200%) !important;
-  backdrop-filter: blur(32px) saturate(200%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.55) !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.8) !important;
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.06),
-    0 8px 24px rgba(0, 0, 0, 0.08),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.4) !important;
-}
+.size-small   { width: 110px; padding: 8px; }
+.size-compact { width: 150px; padding: 10px; }
+.size-slim    { width: 190px; padding: 10px; }
+.size-wide    { width: 240px; padding: 10px; }
+
+/* ── Large size tiers ── */
 .size-medium {
   width: calc(var(--grid-unit) * 2 + var(--grid-gap));
   height: var(--grid-unit);
@@ -171,7 +133,7 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(1.1);
-  filter: blur(4px) brightness(1.1); /* Brighter for light mode */
+  filter: blur(4px) brightness(1.1);
 }
 
 .video-overlay {

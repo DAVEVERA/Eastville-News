@@ -24,7 +24,9 @@ export const fetchWeather = async (lat = 51.65, lon = 5.61) => {
       `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto`
     );
     const data = await response.json();
-    
+
+    if (!data.current_weather || !data.daily?.time) return null;
+
     // Process 3-day forecast
     const forecast = data.daily.time.slice(1, 4).map((time, i) => ({
       date: time,

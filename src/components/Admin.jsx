@@ -125,6 +125,18 @@ const Admin = ({ data, onSave, onClose }) => {
                     </div>
                   </div>
 
+                  {/* Weergavetijd voor volledig scherm slides */}
+                  {item.imageOnly && (
+                    <div className="input-group" style={{ gridColumn: 'span 2' }}>
+                      <label>Weergavetijd ({Math.round((item.duration || 12000) / 1000)} seconden)</label>
+                      <input
+                        type="range" min="5" max="60" step="1"
+                        value={Math.round((item.duration || 12000) / 1000)}
+                        onChange={e => handleNewsChange(item.id, 'duration', parseInt(e.target.value) * 1000)}
+                      />
+                    </div>
+                  )}
+
                   {/* Opties alleen zichtbaar als NIET volledig scherm */}
                   {!item.imageOnly && (
                     <>
