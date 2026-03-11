@@ -72,6 +72,17 @@
       "splitRatio": 50
     },
     {
+      "id": 11,
+      "title": "Resultaten werkgeluk Servicekantoor",
+      "description": "",
+      "foregroundImage": "https://davevera.nl/wp-content/uploads/2026/03/werkgeluk.png",
+      "backgroundImage": "",
+      "backgroundColor": "#0d1a2e",
+      "category": "Nieuws",
+      "imageOnly": true,
+      "duration": 25000
+    },
+    {
       "id": 8,
       "title": "Rode dashboardlampjes",
       "description": "",
