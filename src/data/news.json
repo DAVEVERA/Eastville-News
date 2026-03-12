@@ -42,6 +42,16 @@
       "splitRatio": 50
     },
     {
+      "id": 12,
+      "title": "Afspraakbevestiging sturen!",
+      "description": "Er zijn opnieuw veel telefoontjes van klanten die online een afspraak hebben gemaakt, maar hiervan geen bevestiging hebben ontvangen. Ook is de NAWTE van de klant in deze gevallen niet gecontroleerd en is de datum niet aangepast.\n\nGraag extra aandacht hiervoor en erop letten dat de bevestiging altijd wordt verstuurd.",
+      "foregroundImage": "",
+      "backgroundImage": "",
+      "backgroundColor": "#1a0d00",
+      "category": "Belangrijk",
+      "splitRatio": 50
+    },
+    {
       "id": 3,
       "title": "Nimble Status",
       "description": "Graag erop letten dat iedereen de juiste status gebruikt in Nimble. Meld je aan zodra je begint en zet je status correct op bijvoorbeeld 'Aan het werk', 'Beschikbaar' of 'Niet beschikbaar'. Meld je ook altijd af via je eigen status; Nimble zet je callcenterstatus dan automatisch op afwezig.",
