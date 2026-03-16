@@ -102,6 +102,16 @@
       "splitRatio": 50
     },
     {
+      "id": 19,
+      "title": "Spelregels dagstart",
+      "description": "Iedereen sluit goed voorbereid aan, toont een actieve houding en respecteert de spelregels. We laten elkaar uitspreken, praten niet door elkaar heen en voeren geen 1-op-1 gesprekken tijdens de dagstart.\n\nWe dragen samen verantwoordelijkheid voor een rustige, duidelijke en gestructureerde start van de dag. De monitor wordt actief gevolgd en relevant nieuws of belangrijke aandachtspunten worden direct gedeeld.\n\nOp dinsdagen en donderdagen wordt de opvang binnen het team zelf geregeld.",
+      "foregroundImage": "",
+      "backgroundImage": "",
+      "backgroundColor": "#0d1a2e",
+      "category": "Dagstart",
+      "splitRatio": 50
+    },
+    {
       "id": 3,
       "title": "Nimble Status",
       "description": "Graag erop letten dat iedereen de juiste status gebruikt in Nimble. Meld je aan zodra je begint en zet je status correct op bijvoorbeeld 'Aan het werk', 'Beschikbaar' of 'Niet beschikbaar'. Meld je ook altijd af via je eigen status; Nimble zet je callcenterstatus dan automatisch op afwezig.",
