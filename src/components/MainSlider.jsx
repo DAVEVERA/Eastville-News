@@ -3,6 +3,7 @@ import './MainSlider.css';
 
 const MainSlider = ({ slides, duration = 12000 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   const slidesRef = React.useRef(slides);
 
   // Keep ref in sync without resetting the timer
@@ -15,12 +16,13 @@ const MainSlider = ({ slides, duration = 12000 }) => {
   // Per-slide duration: each slide can override the default via a duration field
   useEffect(() => {
     if (!slidesRef.current || slidesRef.current.length === 0) return;
+    if (isPaused) return;
     const currentDuration = slidesRef.current[currentIndex]?.duration || duration;
     const timer = setTimeout(() => {
       setCurrentIndex((prev) => (prev + 1) % slidesRef.current.length);
     }, currentDuration);
     return () => clearTimeout(timer);
-  }, [currentIndex, duration]);
+  }, [currentIndex, duration, isPaused]);
 
   if (!slides || slides.length === 0) return null;
 
@@ -29,6 +31,9 @@ const MainSlider = ({ slides, duration = 12000 }) => {
   const bgStyle = currentSlide.backgroundImage
     ? { backgroundImage: `url(${currentSlide.backgroundImage})` }
     : { backgroundColor: currentSlide.backgroundColor || '#fff' };
+
+  const goNext = () => setCurrentIndex(prev => (prev + 1) % slides.length);
+  const goPrev = () => setCurrentIndex(prev => (prev - 1 + slides.length) % slides.length);
 
   return (
     <div className="main-slider" style={bgStyle}>
@@ -67,7 +72,7 @@ const MainSlider = ({ slides, duration = 12000 }) => {
                   alt={slide.title}
                   style={{
                     maxWidth: '92%',
-                    maxHeight: '92%',
+                    maxHeight: 'calc(92vh - 60px)',
                     objectFit: 'contain',
                     filter: 'drop-shadow(0 20px 60px rgba(0,0,0,0.25))',
                     transform: `scale(${slide.imageScale || 1}) translate(${slide.imageOffsetX || 0}%, ${slide.imageOffsetY || 0}%)`
@@ -122,14 +127,24 @@ const MainSlider = ({ slides, duration = 12000 }) => {
           </div>
         );
       })}
-      <div className="slider-nav-fixed">
-        {slides.map((_, index) => (
-          <div
-            key={index}
-            className={`nav-dot-small ${index === currentIndex ? 'active' : ''}`}
-            onClick={() => setCurrentIndex(index)}
-          ></div>
-        ))}
+
+      {/* Navigation + Controls bar */}
+      <div className="slider-controls">
+        <button className="ctrl-btn" onClick={goPrev} title="Vorige">&#8249;</button>
+        <div className="nav-dots">
+          {slides.map((_, index) => (
+            <div
+              key={index}
+              className={`nav-dot-small ${index === currentIndex ? 'active' : ''}`}
+              onClick={() => setCurrentIndex(index)}
+            />
+          ))}
+        </div>
+        <button className="ctrl-btn" onClick={goNext} title="Volgende">&#8250;</button>
+        <div className="ctrl-divider" />
+        <button className={`ctrl-btn pause-btn ${isPaused ? 'paused' : ''}`} onClick={() => setIsPaused(p => !p)} title={isPaused ? 'Hervatten' : 'Pauzeren'}>
+          {isPaused ? '▶' : '⏸'}
+        </button>
       </div>
     </div>
   );
