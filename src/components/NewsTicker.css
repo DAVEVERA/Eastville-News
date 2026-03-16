@@ -39,6 +39,50 @@
   margin-top: 2px;
 }
 
+/* Weather + Traffic info pills */
+.ticker-info-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 18px;
+  height: 100%;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+
+.ticker-pill-icon {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.ticker-pill-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.ticker-pill-main {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+}
+
+.ticker-pill-sub {
+  font-size: 0.58rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.ticker-divider {
+  width: 1px;
+  height: 60%;
+  background: rgba(255, 255, 255, 0.15);
+  flex-shrink: 0;
+}
+
 .ticker-wrap {
   flex: 1;
   overflow: hidden;

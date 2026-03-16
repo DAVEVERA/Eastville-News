@@ -5,14 +5,8 @@ const Admin = ({ data, onSave, onClose }) => {
   const [news, setNews] = useState(data.featured);
   const [ticker, setTicker] = useState(data.ticker);
   const [rssSources, setRssSources] = useState(data.rssSources || []);
-  const [widgets, setWidgets] = useState(data.widgets || []);
-
   const handleNewsChange = (id, field, value) => {
     setNews(prev => prev.map(item => item.id === id ? { ...item, [field]: value } : item));
-  };
-
-  const handleWidgetChange = (id, field, value) => {
-    setWidgets(prev => prev.map(w => w.id === id ? { ...w, [field]: value } : w));
   };
 
   const handleSave = (e) => {
@@ -22,7 +16,7 @@ const Admin = ({ data, onSave, onClose }) => {
       ticker: ticker,
       rssSources: rssSources,
       webSources: data.webSources || [],
-      widgets: widgets,
+      widgets: data.widgets || [],
       traffic: data.traffic
     });
   };
@@ -63,7 +57,6 @@ const Admin = ({ data, onSave, onClose }) => {
       <div style={{ display: 'flex', gap: '30px', marginBottom: '30px', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
         <button className={activeTab === 'news' ? 'tab-btn active' : 'tab-btn'} onClick={() => setActiveTab('news')}>NIEUWS</button>
         <button className={activeTab === 'ticker' ? 'tab-btn active' : 'tab-btn'} onClick={() => setActiveTab('ticker')}>TICKER</button>
-        <button className={activeTab === 'widgets' ? 'tab-btn active' : 'tab-btn'} onClick={() => setActiveTab('widgets')}>WIDGETS</button>
       </div>
 
       <form onSubmit={handleSave} style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
@@ -230,60 +223,6 @@ const Admin = ({ data, onSave, onClose }) => {
           </div>
         )}
 
-        {activeTab === 'widgets' && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '30px' }}>
-            {widgets.map(w => (
-              <div key={w.id} className="admin-card glass" style={{ padding: '30px', background: 'rgba(0,0,0,0.03)', borderRadius: '24px', position: 'relative', height: 'auto', width: 'auto' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '25px' }}>
-                  <h3 style={{ margin: 0, textTransform: 'uppercase', letterSpacing: '1px' }}>{w.name}</h3>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <span style={{ fontSize: '0.8rem', opacity: 0.5 }}>ZICHTBAAR</span>
-                    <input type="checkbox" checked={w.isVisible} onChange={e => handleWidgetChange(w.id, 'isVisible', e.target.checked)} style={{ width: '24px', height: '24px' }} />
-                  </div>
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
-                  <p style={{ fontSize: '0.8rem', opacity: 0.6, margin: 0 }}>Tip: Versleep en verschaal widgets direct op het dashboard voor iOS-stijl adaptiviteit.</p>
-
-                  <div className="input-group">
-                    <label>Formaat (iOS Stijl)</label>
-                    <div style={{ display: 'flex', gap: '10px' }}>
-                      {['small', 'compact', 'slim', 'wide', 'medium', 'xlarge', 'large'].map(size => (
-                        <button
-                          key={size}
-                          type="button"
-                          onClick={() => handleWidgetChange(w.id, 'size', size)}
-                          style={{
-                            flex: 1,
-                            padding: '12px',
-                            borderRadius: '12px',
-                            border: '1px solid rgba(0,0,0,0.1)',
-                            background: w.size === size ? 'var(--primary-color)' : 'rgba(0,0,0,0.05)',
-                            color: w.size === size ? '#fff' : '#000',
-                            fontWeight: '800',
-                            textTransform: 'uppercase',
-                            fontSize: '0.7rem',
-                            cursor: 'pointer'
-                          }}
-                        >
-                          {size}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="input-group" style={{ opacity: 0.5 }}>
-                    <label>Positie (Automatisch bij slepen)</label>
-                    <div style={{ display: 'flex', gap: '15px' }}>
-                      <div>X: {w.px ?? 0}px</div>
-                      <div>Y: {w.py ?? 0}px</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
 
         <div style={{ height: '60px' }}></div>
         <button type="submit" className="save-btn">THEMA & INSTELLINGEN OPSLAAN</button>
