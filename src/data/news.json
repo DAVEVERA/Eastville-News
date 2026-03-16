@@ -1,6 +1,17 @@
 {
   "featured": [
     {
+      "id": 20,
+      "title": "Performance overzicht",
+      "embedTitle": "Dataset CSC medewerkers",
+      "embedUrl": "https://app.powerbi.com/reportEmbed?reportId=72cd2b26-71a7-4c52-921d-8094c74b1b85&autoAuth=true&embeddedDemo=true",
+      "foregroundImage": "",
+      "backgroundImage": "",
+      "backgroundColor": "#0f0f1a",
+      "category": "Performance",
+      "duration": 35000
+    },
+    {
       "id": 1,
       "title": "Oostendorp BYD is Here!",
       "description": "Vestiging Roermond geopend (02-02-2026) en Den Bosch (03-02-2026). Ontdek Build Your Dreams!",

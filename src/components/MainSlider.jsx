@@ -40,7 +40,21 @@ const MainSlider = ({ slides, duration = 12000 }) => {
             key={slide.id}
             className={`slide ${index === currentIndex ? 'active' : ''}`}
           >
-            {slide.imageOnly ? (
+            {slide.embedUrl ? (
+              <div className="embed-slide-layout" style={{ background: slide.backgroundColor || '#0f0f1a' }}>
+                <div className="embed-slide-header">
+                  {slide.category && <span className="embed-category-tag">{slide.category}</span>}
+                  <span className="embed-slide-title">{slide.title}</span>
+                </div>
+                <iframe
+                  title={slide.embedTitle || slide.title}
+                  src={slide.embedUrl}
+                  frameBorder="0"
+                  allowFullScreen
+                  className="embed-iframe"
+                />
+              </div>
+            ) : slide.imageOnly ? (
               <div style={{
                 width: '100vw',
                 height: '100vh',
