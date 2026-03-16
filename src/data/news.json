@@ -52,6 +52,56 @@
       "splitRatio": 50
     },
     {
+      "id": 13,
+      "title": "Venray: geen haal & breng via Pim Elbers",
+      "description": "Vanaf 1 mei komen auto's bij vestiging Venray niet meer in aanmerking voor de haal- en brengservice die voorheen door Pim Elbers werd gefaciliteerd.\n\nHoud hier rekening mee bij het inplannen van afspraken.",
+      "foregroundImage": "",
+      "backgroundImage": "",
+      "backgroundColor": "#12102a",
+      "category": "Venray",
+      "splitRatio": 50
+    },
+    {
+      "id": 14,
+      "title": "Middelrode: wachters per uur",
+      "description": "Graag extra aandacht voor het aantal wachters dat per uur wordt ingepland. Deze week is het al twee keer voorgekomen dat er 5 à 6 wachters tegelijk stonden gepland tussen 08:00 en 11:00 uur.\n\nPlan wachters gespreid en houd het overzicht.",
+      "foregroundImage": "",
+      "backgroundImage": "",
+      "backgroundColor": "#1a0e00",
+      "category": "Middelrode",
+      "splitRatio": 50
+    },
+    {
+      "id": 15,
+      "title": "Helmond: Toyota terugroepacties",
+      "description": "Uitdaging: er wordt niet gewerkt met de juiste werkgroep.\n\nAlle Toyota terugroepacties dienen gepland te worden onder Toyota Hitech/Airco. Zorg dat dit consequent correct wordt ingesteld bij het aanmaken van de afspraak.",
+      "foregroundImage": "",
+      "backgroundImage": "",
+      "backgroundColor": "#1a0000",
+      "category": "Helmond",
+      "splitRatio": 50
+    },
+    {
+      "id": 16,
+      "title": "Eindhoven: garantieclaim communicatie",
+      "description": "Een klant meldt onvrede over de afwijzing van een garantieclaim wegens het overschrijden van de gestelde termijn. Volgens de klant was hierover vooraf niet duidelijk gecommuniceerd.\n\nDe klant geeft aan dat onderhoudsmomenten bepalend zijn voor het behoud van garantie, maar dat dit niet expliciet is besproken. Hierdoor voelt de klant zich verrast, teleurgesteld en in het vertrouwen geschaad.\n\nZorg dat garantievoorwaarden altijd proactief en helder worden gecommuniceerd.",
+      "foregroundImage": "",
+      "backgroundImage": "",
+      "backgroundColor": "#1a1500",
+      "category": "Eindhoven",
+      "splitRatio": 50
+    },
+    {
+      "id": 17,
+      "title": "Arnhem: vrijdag haal & breng",
+      "description": "Op vrijdag draaien wij met de helft van de bezetting aan de balie. Dit zorgt regelmatig voor problemen.\n\nVerzoek: plan geen haal- en brengservice meer op vrijdag. Als een haal- en brengservice toch op vrijdag wordt ingepland, zorg dan dat dit goed is voorbereid en realistisch is ingeschaald.",
+      "foregroundImage": "",
+      "backgroundImage": "",
+      "backgroundColor": "#001a0a",
+      "category": "Arnhem",
+      "splitRatio": 50
+    },
+    {
       "id": 3,
       "title": "Nimble Status",
       "description": "Graag erop letten dat iedereen de juiste status gebruikt in Nimble. Meld je aan zodra je begint en zet je status correct op bijvoorbeeld 'Aan het werk', 'Beschikbaar' of 'Niet beschikbaar'. Meld je ook altijd af via je eigen status; Nimble zet je callcenterstatus dan automatisch op afwezig.",
