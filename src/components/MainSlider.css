@@ -148,10 +148,10 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 0 30px;
-  height: 52px;
+  padding: 0 24px;
+  height: 38px;
   flex-shrink: 0;
-  background: rgba(0, 0, 0, 0.35);
+  background: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
@@ -180,7 +180,7 @@
   flex: 1;
   width: 100%;
   /* leave room for ticker at bottom */
-  height: calc(100vh - 52px - 60px);
+  height: calc(100vh - 38px - 60px);
   border: none;
   display: block;
   background: #fff;
