@@ -218,21 +218,23 @@
   background: #fff;
 }
 
-/* ── Navigation + Controls bar ───────────────────── */
+/* ── Navigation + Controls bar (vertical pill) ───── */
 .slider-controls {
   position: absolute;
-  bottom: 72px;
-  right: 24px;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 6px;
   z-index: 100;
-  background: rgba(0, 0, 0, 0.35);
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
-  padding: 10px 20px;
-  border-radius: 100px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.28);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  padding: 10px 6px;
+  border-radius: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -243,48 +245,51 @@
 
 .nav-dots {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
 }
 
 .nav-dot-small {
-  width: 10px;
-  height: 10px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.3);
   cursor: pointer;
-  transition: all 0.4s ease;
+  transition: all 0.35s ease;
   flex-shrink: 0;
 }
 
 .nav-dot-small.active {
   background: var(--primary-color);
-  width: 32px;
+  height: 22px;
   border-radius: 100px;
 }
 
 .ctrl-btn {
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.75);
-  font-size: 1.5rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1rem;
   line-height: 1;
   cursor: pointer;
-  padding: 2px 6px;
-  border-radius: 8px;
+  padding: 4px;
+  border-radius: 6px;
   transition: color 0.2s, background 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 24px;
+  height: 24px;
 }
 
 .ctrl-btn:hover {
   color: #fff;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .pause-btn {
-  font-size: 1rem;
+  font-size: 0.75rem;
 }
 
 .pause-btn.paused {
@@ -292,9 +297,9 @@
 }
 
 .ctrl-divider {
-  width: 1px;
-  height: 20px;
-  background: rgba(255, 255, 255, 0.2);
+  width: 16px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.15);
   flex-shrink: 0;
 }
 
