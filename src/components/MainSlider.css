@@ -221,9 +221,8 @@
 /* ── Navigation + Controls bar ───────────────────── */
 .slider-controls {
   position: absolute;
-  bottom: 80px;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 72px;
+  right: 24px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -234,6 +233,12 @@
   padding: 10px 20px;
   border-radius: 100px;
   border: 1px solid rgba(255, 255, 255, 0.12);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.main-slider:hover .slider-controls {
+  opacity: 1;
 }
 
 .nav-dots {
