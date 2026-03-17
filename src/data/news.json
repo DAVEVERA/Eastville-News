@@ -1,16 +1,6 @@
 {
   "featured": [
     {
-      "id": 20,
-      "title": "Performance overzicht week 11",
-      "foregroundImage": "https://davevera.nl/wp-content/uploads/2026/03/week11PBI.png",
-      "backgroundImage": "",
-      "backgroundColor": "#0f0f1a",
-      "category": "Performance",
-      "imageOnly": true,
-      "duration": 25000
-    },
-    {
       "id": 21,
       "title": "Luchtbevochtigers bijvullen",
       "description": "Friendly Reminder: het verzoek om twee keer per dag de luchtbevochigers te checken en wanneer nodig deze bij te vullen. Zo behouden we een zo goed als mogelijke luchtkwaliteit.",
