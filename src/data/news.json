@@ -11,6 +11,16 @@
       "duration": 25000
     },
     {
+      "id": 21,
+      "title": "Luchtbevochtigers bijvullen",
+      "description": "Friendly Reminder: het verzoek om twee keer per dag de luchtbevochigers te checken en wanneer nodig deze bij te vullen. Zo behouden we een zo goed als mogelijke luchtkwaliteit.",
+      "foregroundImage": "",
+      "backgroundImage": "",
+      "backgroundColor": "#0a1a2e",
+      "category": "Mededeling",
+      "splitRatio": 50
+    },
+    {
       "id": 1,
       "title": "Oostendorp BYD is Here!",
       "description": "Vestiging Roermond geopend (02-02-2026) en Den Bosch (03-02-2026). Ontdek Build Your Dreams!",
