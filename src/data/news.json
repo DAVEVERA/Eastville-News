@@ -2,14 +2,13 @@
   "featured": [
     {
       "id": 20,
-      "title": "Performance overzicht",
-      "embedTitle": "Dataset CSC medewerkers",
-      "embedUrl": "https://app.powerbi.com/reportEmbed?reportId=72cd2b26-71a7-4c52-921d-8094c74b1b85&autoAuth=true&ctid=0580f368-132b-43bf-bac6-ca3818d7d7c1&chromeless=1&language=nl",
-      "foregroundImage": "",
+      "title": "Performance overzicht week 11",
+      "foregroundImage": "https://davevera.nl/wp-content/uploads/2026/03/week11PBI.png",
       "backgroundImage": "",
       "backgroundColor": "#0f0f1a",
       "category": "Performance",
-      "duration": 35000
+      "imageOnly": true,
+      "duration": 25000
     },
     {
       "id": 1,
