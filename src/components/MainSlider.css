@@ -102,7 +102,7 @@
 }
 
 .news-title {
-  font-size: clamp(1.6rem, 2.6vw, 3.6rem);
+  font-size: clamp(1.6rem, 3vw, 3.8rem);
   font-weight: 950;
   line-height: 0.95;
   margin-bottom: clamp(12px, 1.6vh, 20px);
@@ -112,8 +112,8 @@
 }
 
 .news-description {
-  font-size: clamp(0.88rem, 1.2vw, 1.5rem);
-  line-height: 1.65;
+  font-size: clamp(0.95rem, 1.7vw, 2.2rem);
+  line-height: 1.6;
   color: #333;
   font-weight: 400;
   white-space: pre-line;
@@ -142,30 +142,30 @@
   display: inline-block;
   background: var(--primary-color);
   color: white;
-  padding: clamp(4px, 0.55vh, 7px) clamp(11px, 1.4vw, 20px);
+  padding: clamp(5px, 0.65vh, 9px) clamp(13px, 1.6vw, 24px);
   border-radius: 100px;
-  font-size: clamp(0.62rem, 0.78vw, 0.82rem);
+  font-size: clamp(0.7rem, 0.88vw, 0.98rem);
   font-weight: 950;
   text-transform: uppercase;
   letter-spacing: 4px;
-  margin-bottom: clamp(11px, 1.6vh, 20px);
+  margin-bottom: clamp(12px, 1.8vh, 22px);
   flex-shrink: 0;
 }
 
 .news-title-text {
-  font-size: clamp(1.6rem, 2.7vw, 3.6rem);
+  font-size: clamp(1.8rem, 3.4vw, 4.2rem);
   font-weight: 950;
   line-height: 0.95;
   letter-spacing: -2px;
   color: #000;
-  margin-bottom: clamp(11px, 1.6vh, 20px);
+  margin-bottom: clamp(12px, 1.8vh, 22px);
   max-width: 92%;
   flex-shrink: 0;
 }
 
 .news-description-text {
-  font-size: clamp(0.88rem, 1.15vw, 1.45rem);
-  line-height: 1.7;
+  font-size: clamp(1rem, 2vw, 2.5rem);
+  line-height: 1.6;
   color: #333;
   max-width: 92%;
   font-weight: 400;
