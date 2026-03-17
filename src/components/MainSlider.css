@@ -37,15 +37,16 @@
 .full-screen-news-grid {
   display: grid;
   width: 100vw;
-  height: 100vh;
+  /* exact fit above the 60px ticker — .slide centers this, giving 30px clear margin top and bottom */
+  height: calc(100vh - 60px);
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  /* never clip text — text column must always show fully */
 }
 
 .news-visual {
   position: relative;
-  height: 100vh;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -87,81 +88,86 @@
 }
 
 .news-copy {
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: clamp(40px, 6vh, 70px) clamp(30px, 5vw, 70px) 80px;
+  padding: clamp(28px, 4vh, 52px) clamp(24px, 3.5vw, 56px) clamp(16px, 2vh, 28px);
   color: #1d1d1f;
   background: rgba(255, 255, 255, 0.85);
   -webkit-backdrop-filter: blur(40px);
   backdrop-filter: blur(40px);
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .news-title {
-  font-size: clamp(2rem, 3.5vw, 4.5rem);
+  font-size: clamp(1.6rem, 2.6vw, 3.6rem);
   font-weight: 950;
   line-height: 0.95;
-  margin-bottom: clamp(16px, 2.5vh, 28px);
-  letter-spacing: -3px;
+  margin-bottom: clamp(12px, 1.6vh, 20px);
+  letter-spacing: -2px;
   color: #000;
   flex-shrink: 0;
 }
 
 .news-description {
-  font-size: clamp(1rem, 1.4vw, 1.7rem);
-  line-height: 1.55;
+  font-size: clamp(0.88rem, 1.2vw, 1.5rem);
+  line-height: 1.65;
   color: #333;
   font-weight: 400;
+  white-space: pre-line;
 }
 
 /* ── Text-only layout ─────────────────────────────── */
 .text-only-layout {
   width: 100vw;
-  height: 100vh;
+  /* exact fit above the 60px ticker — .slide centers this vertically,
+     leaving a comfortable 30px gap at top and ~90px below before the ticker */
+  height: calc(100vh - 60px);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  padding: clamp(36px, 6vh, 90px) clamp(40px, 11vw, 160px) 80px;
+  padding: clamp(28px, 4vh, 52px) clamp(36px, 9vw, 140px) clamp(16px, 2vh, 28px);
   background: rgba(255, 255, 255, 0.88);
   -webkit-backdrop-filter: blur(40px);
   backdrop-filter: blur(40px);
   color: #1d1d1f;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .category-tag-text {
   display: inline-block;
   background: var(--primary-color);
   color: white;
-  padding: clamp(5px, 0.7vh, 8px) clamp(14px, 1.8vw, 26px);
+  padding: clamp(4px, 0.55vh, 7px) clamp(11px, 1.4vw, 20px);
   border-radius: 100px;
-  font-size: clamp(0.7rem, 0.9vw, 0.9rem);
+  font-size: clamp(0.62rem, 0.78vw, 0.82rem);
   font-weight: 950;
   text-transform: uppercase;
   letter-spacing: 4px;
-  margin-bottom: clamp(16px, 2.5vh, 32px);
+  margin-bottom: clamp(11px, 1.6vh, 20px);
   flex-shrink: 0;
 }
 
 .news-title-text {
-  font-size: clamp(1.8rem, 3.2vw, 4.2rem);
+  font-size: clamp(1.6rem, 2.7vw, 3.6rem);
   font-weight: 950;
   line-height: 0.95;
   letter-spacing: -2px;
   color: #000;
-  margin-bottom: clamp(16px, 2.5vh, 32px);
-  max-width: 90%;
+  margin-bottom: clamp(11px, 1.6vh, 20px);
+  max-width: 92%;
   flex-shrink: 0;
 }
 
 .news-description-text {
-  font-size: clamp(0.95rem, 1.3vw, 1.7rem);
-  line-height: 1.6;
+  font-size: clamp(0.88rem, 1.15vw, 1.45rem);
+  line-height: 1.7;
   color: #333;
-  max-width: 90%;
+  max-width: 92%;
   font-weight: 400;
   white-space: pre-line;
 }
@@ -305,35 +311,29 @@
 /* ── Responsive breakpoints ──────────────────────── */
 @media (max-width: 1200px) {
   .full-screen-news-grid {
-    display: flex;
-    flex-direction: column;
+    /* On narrower screens: stack image on top, text below */
+    grid-template-columns: 1fr !important;
+    grid-template-rows: clamp(160px, 30vh, 300px) 1fr;
+    height: calc(100vh - 60px);
   }
   .news-visual {
-    height: 50vh;
+    height: 100%; /* fills its grid row */
     width: 100vw;
   }
   .news-copy {
-    height: 50vh;
+    height: 100%; /* fills remaining grid row */
     width: 100vw;
-    padding: 32px 40px;
-    align-items: center;
-    text-align: center;
-  }
-  .slider-controls {
-    bottom: 70px;
+    padding: 20px 32px 16px;
+    align-items: flex-start;
+    text-align: left;
   }
 }
 
 @media (max-width: 768px) {
   .news-copy {
-    padding: 24px;
+    padding: 16px 20px 12px;
   }
   .text-only-layout {
-    padding: 32px 28px;
-  }
-  .slider-controls {
-    bottom: 68px;
-    padding: 8px 14px;
-    gap: 8px;
+    padding: 20px 22px 12px;
   }
 }

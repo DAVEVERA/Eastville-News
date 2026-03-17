@@ -38,7 +38,7 @@ const MainSlider = ({ slides, duration = 12000 }) => {
   return (
     <div className="main-slider" style={bgStyle}>
       {slides.map((slide, index) => {
-        const ratio = slide.splitRatio || 45;
+        const ratio = Math.min(slide.splitRatio || 35, 40);
         const hasImage = !!slide.foregroundImage;
         return (
           <div
