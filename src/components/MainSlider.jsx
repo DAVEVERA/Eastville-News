@@ -45,7 +45,7 @@ const MainSlider = ({ slides, duration = 12000 }) => {
               <iframe
                 title={slide.title}
                 src={slide.embedUrl}
-                style={{ display: 'block', width: '100vw', height: 'calc(100vh - 60px)', border: 'none', background: slide.backgroundColor || '#fff' }}
+                style={{ display: 'block', width: '100vw', height: '100vh', border: 'none', background: slide.backgroundColor || '#fff' }}
               />
             ) : slide.embedUrl ? (
               <div className="embed-slide-layout" style={{ background: slide.backgroundColor || '#0f0f1a' }}>
