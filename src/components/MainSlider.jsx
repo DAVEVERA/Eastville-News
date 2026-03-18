@@ -45,7 +45,13 @@ const MainSlider = ({ slides, duration = 12000 }) => {
             key={slide.id}
             className={`slide ${index === currentIndex ? 'active' : ''}`}
           >
-            {slide.embedUrl ? (
+            {slide.pdfOnly ? (
+              <iframe
+                title={slide.title}
+                src={slide.embedUrl}
+                style={{ display: 'block', width: '100vw', height: 'calc(100vh - 60px)', border: 'none', background: slide.backgroundColor || '#fff' }}
+              />
+            ) : slide.embedUrl ? (
               <div className="embed-slide-layout" style={{ background: slide.backgroundColor || '#0f0f1a' }}>
                 <div className="embed-slide-header">
                   {slide.category && <span className="embed-category-tag">{slide.category}</span>}

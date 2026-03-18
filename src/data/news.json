@@ -1,6 +1,15 @@
 {
   "featured": [
     {
+      "id": 22,
+      "title": "Proostendorp Agenda",
+      "embedUrl": "https://davevera.nl/wp-content/uploads/2026/03/1.-Basisposter_agenda_Proostendorp_Def.pdf#toolbar=0&navpanes=0&scrollbar=0&view=Fit",
+      "backgroundColor": "#ffffff",
+      "category": "",
+      "pdfOnly": true,
+      "duration": 20000
+    },
+    {
       "id": 21,
       "title": "Luchtbevochtigers bijvullen",
       "description": "Friendly Reminder: het verzoek om twee keer per dag de luchtbevochigers te checken en wanneer nodig deze bij te vullen. Zo behouden we een zo goed als mogelijke luchtkwaliteit.",
