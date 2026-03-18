@@ -10,6 +10,16 @@
       "duration": 20000
     },
     {
+      "id": 23,
+      "title": "Bandenwissel: juiste vestiging",
+      "description": "Let op bij het inplannen van een bandenwissel: zorg dat deze op de juiste vestiging wordt ingepland. Is dit alsnog verkeerd gegaan in het systeem? Neem dan even contact op met Richard v. Lokven.",
+      "foregroundImage": "",
+      "backgroundImage": "",
+      "backgroundColor": "#1a0a00",
+      "category": "Attentie",
+      "splitRatio": 50
+    },
+    {
       "id": 21,
       "title": "Luchtbevochtigers bijvullen",
       "description": "Friendly Reminder: het verzoek om twee keer per dag de luchtbevochigers te checken en wanneer nodig deze bij te vullen. Zo behouden we een zo goed als mogelijke luchtkwaliteit.",
