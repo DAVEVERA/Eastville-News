@@ -1,28 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './MainSlider.css';
 
 const MainSlider = ({ slides, duration = 12000 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const slidesRef = React.useRef(slides);
 
-  // Keep ref in sync without resetting the timer
+  // Clamp index when slides array shrinks (e.g. remote data update)
   useEffect(() => {
-    slidesRef.current = slides;
-    // Clamp index if slides shrunk
-    if (currentIndex >= slides.length) setCurrentIndex(0);
+    if (slides && currentIndex >= slides.length) setCurrentIndex(0);
   }, [slides]);
 
-  // Per-slide duration: each slide can override the default via a duration field
+  // Auto-advance: each slide can override duration via its own duration field
   useEffect(() => {
-    if (!slidesRef.current || slidesRef.current.length === 0) return;
-    if (isPaused) return;
-    const currentDuration = slidesRef.current[currentIndex]?.duration || duration;
+    if (!slides || slides.length === 0 || isPaused) return;
+    const dur = slides[currentIndex]?.duration ?? duration;
     const timer = setTimeout(() => {
-      setCurrentIndex((prev) => (prev + 1) % slidesRef.current.length);
-    }, currentDuration);
+      setCurrentIndex(prev => (prev + 1) % slides.length);
+    }, dur);
     return () => clearTimeout(timer);
-  }, [currentIndex, duration, isPaused]);
+  }, [currentIndex, duration, isPaused, slides]);
 
   if (!slides || slides.length === 0) return null;
 
