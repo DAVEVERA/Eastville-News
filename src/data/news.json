@@ -203,6 +203,17 @@
       "duration": 20000
     },
     {
+      "id": 24,
+      "title": "Belangrijk! BYD Nog niet 100% operationeel!",
+      "description": "Geen onderhoudsafspraken en aanverwanten plannen, eerst checken, dan pas plannen!",
+      "foregroundImage": "https://davevera.nl/wp-content/uploads/2026/03/Open_BYD_Atto_2.jpeg",
+      "backgroundImage": "",
+      "backgroundColor": "#001a33",
+      "category": "BYD",
+      "splitRatio": 50,
+      "duration": 20000 
+    },
+    {
       "id": 9,
       "title": "Oranje dashboardlampjes",
       "description": "",
