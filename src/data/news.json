@@ -7,7 +7,7 @@
       "backgroundColor": "#ffffff",
       "category": "",
       "pdfOnly": true,
-      "duration": 50000
+      "duration": 10000
     },
     {
       "id": 23,
@@ -17,7 +17,8 @@
       "backgroundImage": "",
       "backgroundColor": "#1a0a00",
       "category": "Attentie",
-      "splitRatio": 50
+      "splitRatio": 50,
+      "duration": 10000
     },
     {
       "id": 21,
@@ -27,7 +28,8 @@
       "backgroundImage": "",
       "backgroundColor": "#0a1a2e",
       "category": "Mededeling",
-      "splitRatio": 50
+      "splitRatio": 50,
+      "duration": 10000
     },
     {
       "id": 1,
@@ -37,7 +39,8 @@
       "backgroundImage": "",
       "backgroundColor": "#001a33",
       "category": "BYD",
-      "splitRatio": 50
+      "splitRatio": 50,
+      "duration": 10000
     },
     {
       "id": 7,
@@ -48,7 +51,8 @@
       "backgroundImage": "",
       "backgroundColor": "#0a0f1a",
       "category": "Toyota",
-      "splitRatio": 55
+      "splitRatio": 55,
+      "duration": 10000
     },
     {
       "id": 2,
@@ -58,7 +62,8 @@
       "backgroundImage": "",
       "backgroundColor": "#0a2a1a",
       "category": "Nieuws",
-      "splitRatio": 50
+      "splitRatio": 50,
+      "duration": 10000
     },
     {
       "id": 6,
@@ -68,7 +73,8 @@
       "backgroundImage": "",
       "backgroundColor": "#1a1000",
       "category": "Service",
-      "splitRatio": 50
+      "splitRatio": 50,
+      "duration": 10000
     },
     {
       "id": 12,
@@ -78,7 +84,8 @@
       "backgroundImage": "",
       "backgroundColor": "#1a0d00",
       "category": "Belangrijk",
-      "splitRatio": 50
+      "splitRatio": 50,
+      "duration": 10000
     },
     {
       "id": 13,
@@ -88,7 +95,8 @@
       "backgroundImage": "",
       "backgroundColor": "#12102a",
       "category": "Venray",
-      "splitRatio": 50
+      "splitRatio": 50,
+      "duration": 10000
     },
     {
       "id": 14,
@@ -98,7 +106,8 @@
       "backgroundImage": "",
       "backgroundColor": "#1a0e00",
       "category": "Middelrode",
-      "splitRatio": 50
+      "splitRatio": 50,
+      "duration": 10000
     },
     {
       "id": 15,
@@ -108,7 +117,8 @@
       "backgroundImage": "",
       "backgroundColor": "#1a0000",
       "category": "Helmond",
-      "splitRatio": 50
+      "splitRatio": 50,
+      "duration": 10000
     },
     {
       "id": 16,
@@ -118,7 +128,8 @@
       "backgroundImage": "",
       "backgroundColor": "#1a1500",
       "category": "Eindhoven",
-      "splitRatio": 50
+      "splitRatio": 50,
+      "duration": 10000
     },
     {
       "id": 17,
@@ -128,7 +139,8 @@
       "backgroundImage": "",
       "backgroundColor": "#001a0a",
       "category": "Arnhem",
-      "splitRatio": 50
+      "splitRatio": 50,
+      "duration": 10000
     },
     {
       "id": 19,
@@ -138,7 +150,8 @@
       "backgroundImage": "",
       "backgroundColor": "#0d1a2e",
       "category": "Dagstart",
-      "splitRatio": 50
+      "splitRatio": 50,
+      "duration": 10000
     },
     {
       "id": 3,
@@ -148,7 +161,8 @@
       "backgroundImage": "",
       "backgroundColor": "#0d2137",
       "category": "Belangrijk",
-      "splitRatio": 50
+      "splitRatio": 50,
+      "duration": 10000
     },
     {
       "id": 4,
@@ -158,7 +172,8 @@
       "backgroundImage": "",
       "backgroundColor": "#1a2637",
       "category": "Mededeling",
-      "splitRatio": 50
+      "splitRatio": 50,
+      "duration": 10000
     },
     {
       "id": 18,
@@ -168,7 +183,8 @@
       "backgroundImage": "",
       "backgroundColor": "#0d1f0d",
       "category": "Agenda",
-      "splitRatio": 50
+      "splitRatio": 50,
+      "duration": 10000
     },
     {
       "id": 5,
@@ -178,7 +194,8 @@
       "backgroundImage": "",
       "backgroundColor": "#0d1f0d",
       "category": "Agenda",
-      "splitRatio": 50
+      "splitRatio": 50,
+      "duration": 10000
     },
     {
       "id": 11,

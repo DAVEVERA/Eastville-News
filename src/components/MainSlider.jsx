@@ -13,7 +13,8 @@ const MainSlider = ({ slides, duration = 12000 }) => {
   // Auto-advance: each slide can override duration via its own duration field
   useEffect(() => {
     if (!slides || slides.length === 0 || isPaused) return;
-    const dur = slides[currentIndex]?.duration ?? duration;
+    const slideDuration = slides[currentIndex]?.duration;
+    const dur = (slideDuration && Number(slideDuration) > 0) ? Number(slideDuration) : Number(duration);
     const timer = setTimeout(() => {
       setCurrentIndex(prev => (prev + 1) % slides.length);
     }, dur);
@@ -22,11 +23,11 @@ const MainSlider = ({ slides, duration = 12000 }) => {
 
   if (!slides || slides.length === 0) return null;
 
-  const currentSlide = slides[currentIndex];
+  const currentSlide = slides[currentIndex] || slides[0];
 
-  const bgStyle = currentSlide.backgroundImage
+  const bgStyle = currentSlide?.backgroundImage
     ? { backgroundImage: `url(${currentSlide.backgroundImage})` }
-    : { backgroundColor: currentSlide.backgroundColor || '#fff' };
+    : { backgroundColor: currentSlide?.backgroundColor || '#fff' };
 
   const goNext = () => setCurrentIndex(prev => (prev + 1) % slides.length);
   const goPrev = () => setCurrentIndex(prev => (prev - 1 + slides.length) % slides.length);
@@ -36,30 +37,39 @@ const MainSlider = ({ slides, duration = 12000 }) => {
       {slides.map((slide, index) => {
         const ratio = Math.min(slide.splitRatio || 35, 40);
         const hasImage = !!slide.foregroundImage;
+        const isActive = index === currentIndex;
+        const isPrev = index === (currentIndex - 1 + slides.length) % slides.length;
+        const isNext = index === (currentIndex + 1) % slides.length;
+        const shouldRenderMedia = isActive || isPrev || isNext;
+
         return (
           <div
             key={slide.id}
-            className={`slide ${index === currentIndex ? 'active' : ''}`}
+            className={`slide ${isActive ? 'active' : ''}`}
           >
             {slide.pdfOnly ? (
-              <iframe
-                title={slide.title}
-                src={slide.embedUrl}
-                style={{ display: 'block', width: '100vw', height: '100vh', border: 'none', background: slide.backgroundColor || '#fff' }}
-              />
+              shouldRenderMedia && (
+                <iframe
+                  title={slide.title}
+                  src={slide.embedUrl}
+                  style={{ display: 'block', width: '100vw', height: '100vh', border: 'none', background: slide.backgroundColor || '#fff' }}
+                />
+              )
             ) : slide.embedUrl ? (
               <div className="embed-slide-layout" style={{ background: slide.backgroundColor || '#0f0f1a' }}>
                 <div className="embed-slide-header">
                   {slide.category && <span className="embed-category-tag">{slide.category}</span>}
                   <span className="embed-slide-title">{slide.title}</span>
                 </div>
-                <iframe
-                  title={slide.embedTitle || slide.title}
-                  src={slide.embedUrl}
-                  frameBorder="0"
-                  allowFullScreen
-                  className="embed-iframe"
-                />
+                {shouldRenderMedia && (
+                  <iframe
+                    title={slide.embedTitle || slide.title}
+                    src={slide.embedUrl}
+                    frameBorder="0"
+                    allowFullScreen
+                    className="embed-iframe"
+                  />
+                )}
               </div>
             ) : slide.imageOnly ? (
               <div style={{
@@ -84,16 +94,18 @@ const MainSlider = ({ slides, duration = 12000 }) => {
             ) : slide.videoUrl ? (
               <div className="full-screen-news-grid" style={{ gridTemplateColumns: `${ratio}vw ${100 - ratio}vw` }}>
                 <div className="news-visual">
-                  <video
-                    key={slide.videoUrl}
-                    src={slide.videoUrl}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    onCanPlay={(e) => e.target.play()}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  />
+                  {shouldRenderMedia && (
+                    <video
+                      key={slide.videoUrl}
+                      src={slide.videoUrl}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      onCanPlay={(e) => e.target.play()}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                  )}
                   {slide.category && <span className="category-tag-large">{slide.category}</span>}
                 </div>
                 <div className="news-copy">
